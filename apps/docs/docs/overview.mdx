@@ -1,0 +1,63 @@
+---
+id: "overview"
+title: "Overview"
+sidebar_position: 1
+description: "Lock closed GitHub issues and pull requests after configurable days of inactivity, with closing comments and dry-run preview."
+keywords:
+  - "lock inactive threads"
+  - "github action"
+  - "stale issues"
+  - "locking"
+  - "automation"
+  - "repository hygiene"
+tags:
+  - "overview"
+---
+
+import { Terminology } from '@cbnventures/docusaurus-preset-nova/blocks';
+
+Lock closed GitHub issues and pull requests after a configurable period of inactivity, keeping resolved conversations from collecting stale replies.
+
+## Why Use This Action?
+
+- **Independent issue and PR settings** so you can apply different <Terminology title="days without updates before a thread is inactive" to="/docs/reference/terminology#inactivity-window">inactivity windows</Terminology>, comments, and <Terminology title="GitHub's native reason for a locked thread" to="/docs/reference/terminology#lock-reason">lock reasons</Terminology> to each type.
+- **<Terminology title="comment posted before a thread is locked" to="/docs/reference/terminology#closing-comment">Closing comment</Terminology> before locking** so contributors see why a <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> was locked and where to continue the conversation.
+- **Label-based exclusions** so <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> that should stay open for discussion aren't swept up by accident.
+- **<Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">Dry-run</Terminology> mode** so you can preview exactly which <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> the action would lock before it changes anything.
+- **Detailed run logs** so you can see which <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> were found and locked in each run.
+- **Input validation** so a misconfigured value fails the run immediately with a clear error instead of producing unexpected results.
+
+## How It Works
+
+The action runs on a schedule you define in your workflow file. Each run searches for inactive issues and pull requests first, then comments on and locks each type in turn.
+
+### Search
+
+The action finds every closed, unlocked <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> in your repository that hasn't been updated within the configured <Terminology title="days without updates before a thread is inactive" to="/docs/reference/terminology#inactivity-window">inactivity window</Terminology>. Issues and pull requests are scanned separately, each against their own day threshold, and up to 1,000 <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> per type are processed in a single run.
+
+### Comment
+
+For every matching <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology>, the action posts a <Terminology title="comment posted before a thread is locked" to="/docs/reference/terminology#closing-comment">closing comment</Terminology> explaining the lock. You can customize the comment text for issues and pull requests independently, or use the built-in defaults.
+
+### Lock
+
+After commenting, the action locks the <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> with the reason you've chosen: `off-topic`, `resolved`, `spam`, or `too heated`. In <Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">dry-run</Terminology> mode, the action logs what it would lock without commenting on or locking anything.
+
+## Getting Started
+
+You can add Lock Inactive Threads to any repository in five steps.
+
+1. Create a workflow file in your repository (e.g., `.github/workflows/lock-inactive-threads.yml`).
+2. Add a `schedule` trigger with a cron expression for how often the action should run.
+3. Pass `GITHUB_TOKEN` and configure the inputs that match your locking policy: inactivity days, comments, <Terminology title="GitHub's native reason for a locked thread" to="/docs/reference/terminology#lock-reason">lock reason</Terminology>, and any labels to exclude.
+4. It's recommended to enable `DRY_RUN` for your first few runs to verify the action targets the right <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology>.
+5. Once the preview looks correct, set `DRY_RUN` to `false` to start locking <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology>.
+
+See [Usage](/docs/getting-started/usage/) for a complete workflow example.
+
+## Next Steps
+
+- [Usage](/docs/getting-started/usage/) — Add the action to your repository and schedule it.
+- [Inputs](/docs/reference/inputs/) — Every configurable input and its default.
+- [Outputs](/docs/reference/outputs/) — What the action returns after it runs.
+- [Terminology](/docs/reference/terminology/) — Every term and concept used throughout the docs.

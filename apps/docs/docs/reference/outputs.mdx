@@ -1,0 +1,53 @@
+---
+id: "outputs"
+title: "Outputs"
+sidebar_position: 2
+description: "Check the result output to determine whether the locking run succeeded or failed, and react to the outcome in downstream workflow steps."
+keywords:
+  - "lock inactive threads"
+  - "outputs"
+  - "result"
+  - "reference"
+tags:
+  - "reference"
+  - "outputs"
+---
+
+import { Terminology } from '@cbnventures/docusaurus-preset-nova/blocks';
+
+Exposes a single output that later workflow steps can read to decide what happens next.
+
+| Name     | Description                                                    |
+|----------|----------------------------------------------------------------|
+| `result` | The success or failure response after the action has completed |
+
+## Values
+
+The `result` output resolves to one of two string values:
+
+- `"true"` — the run completed successfully and every <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> was locked (or previewed in <Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">dry-run</Terminology> mode) without errors
+- `"false"` — one or more <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> failed to lock, or the action threw an unexpected error
+
+If any individual <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> encounters an error during locking, the action continues processing the remaining <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> and then sets `result` to `"false"` once the run finishes. You'll still see per-thread details in the workflow log when `LOG_OUTPUT` is enabled.
+
+## Reading the Output
+
+You can reference the output in a downstream step with `steps.<id>.outputs.result`, where `<id>` matches the step's `id` field. This is useful for sending a notification or opening an issue when the action reports a failure.
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lock inactive threads
+        id: lock-threads
+        uses: mrjackyliang/lock-inactive-threads@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify on failure
+        if: steps.lock-threads.outputs.result == 'false'
+        run: echo "Lock Inactive Threads reported a failure."
+```
+
+The `if` conditional evaluates the string value of `result`, so you can gate any follow-up step — a Slack message, an issue creation, or a repository dispatch — on whether the run succeeded.

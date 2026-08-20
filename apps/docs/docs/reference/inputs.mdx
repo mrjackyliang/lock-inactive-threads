@@ -1,0 +1,128 @@
+---
+id: "inputs"
+title: "Inputs"
+sidebar_position: 1
+description: "Configure Lock Inactive Threads with inputs for inactivity thresholds, lock reasons, custom comments, label exclusions, dry-run mode, and logging."
+keywords:
+  - "lock inactive threads"
+  - "inputs"
+  - "configuration"
+  - "parameters"
+  - "reference"
+tags:
+  - "reference"
+  - "inputs"
+---
+
+import { Terminology } from '@cbnventures/docusaurus-preset-nova/blocks';
+
+Control the action's behavior through inputs passed in the `with` block of your workflow step.
+
+## Quick Reference
+
+| Name                  | Required | Default       | Description                                                                                                                                                                            |
+|-----------------------|----------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `GITHUB_TOKEN`        | Yes      |               | GitHub token used to search and lock issues and pull requests                                                                                                                          |
+| `ISSUE_COMMENT`       | No       | _(see below)_ | Comment to add before locking an inactive issue                                                                                                                                        |
+| `ISSUE_INACTIVE_DAYS` | No       | `30`          | Number of days of inactivity before an issue is locked                                                                                                                                 |
+| `ISSUE_LOCK_REASON`   | No       | `resolved`    | <Terminology title="GitHub's native reason for a locked thread" to="/docs/reference/terminology#lock-reason">Lock reason</Terminology> (`off-topic`, `resolved`, `spam`, `too heated`) |
+| `PR_COMMENT`          | No       | _(see below)_ | Comment to add before locking an inactive pull request                                                                                                                                 |
+| `PR_INACTIVE_DAYS`    | No       | `30`          | Number of days of inactivity before a pull request is locked                                                                                                                           |
+| `PR_LOCK_REASON`      | No       | `resolved`    | <Terminology title="GitHub's native reason for a locked thread" to="/docs/reference/terminology#lock-reason">Lock reason</Terminology> (`off-topic`, `resolved`, `spam`, `too heated`) |
+| `EXCLUDE_LABELS`      | No       |               | Comma-delimited list of labels to exclude from locking                                                                                                                                 |
+| `LOG_OUTPUT`          | No       | `true`        | Enable detailed logging of locked issues and pull requests                                                                                                                             |
+| `DRY_RUN`             | No       | `false`       | Run without making any changes (preview what would be locked)                                                                                                                          |
+
+## Token
+
+`GITHUB_TOKEN` is the only required input. You can use the automatic `secrets.GITHUB_TOKEN` that GitHub provides to every workflow run — no manual setup is needed.
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+The token needs read and write access to issues and pull requests. The default `secrets.GITHUB_TOKEN` already has these permissions when your workflow's `permissions` block grants `issues: write` and `pull-requests: write`.
+
+## Inactivity Thresholds
+
+`ISSUE_INACTIVE_DAYS` and `PR_INACTIVE_DAYS` control how long a <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> must be inactive before it's eligible for locking. Both default to `30` days and require a minimum value of `1`.
+
+You can set different thresholds for issues and pull requests. For example, you might want pull requests locked sooner since stale PRs tend to become unmergeable faster.
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ISSUE_INACTIVE_DAYS: "60"
+  PR_INACTIVE_DAYS: "14"
+```
+
+## Lock Reasons
+
+`ISSUE_LOCK_REASON` and `PR_LOCK_REASON` set the reason GitHub displays on a locked <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology>. Both default to `resolved`.
+
+GitHub supports four <Terminology title="GitHub's native reason for a locked thread" to="/docs/reference/terminology#lock-reason">lock reasons</Terminology>:
+
+| Reason       | When to use                                                                                                                                       |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `off-topic`  | The conversation drifted away from the original topic                                                                                             |
+| `resolved`   | The issue was fixed or the pull request was merged/closed normally                                                                                |
+| `spam`       | The <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> contains spam or abusive content |
+| `too heated` | The discussion became unconstructive or hostile                                                                                                   |
+
+Most repositories can leave both at the default `resolved`. You only need to change the reason if you're locking <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> for a specific policy reason.
+
+## Comments
+
+`ISSUE_COMMENT` and `PR_COMMENT` let you customize the message posted before a <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> is locked. When you don't set these inputs, the action posts these defaults:
+
+- **Issue** — "Due to inactivity, this issue will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new issue."
+- **Pull Request** — "Due to inactivity, this pull request will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new pull request."
+
+To use a custom message, pass it as a string:
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ISSUE_COMMENT: "This issue has been locked due to inactivity. Please open a new issue if needed."
+```
+
+Passing an empty string uses the default comment — it doesn't suppress commenting.
+
+## Label Exclusions
+
+`EXCLUDE_LABELS` accepts a comma-delimited list of labels. Any issue or pull request carrying a matching label is skipped during locking, even if it meets the inactivity threshold.
+
+A single label:
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  EXCLUDE_LABELS: "keep-open"
+```
+
+Multiple labels:
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  EXCLUDE_LABELS: "keep-open, pinned, discussion"
+```
+
+Spaces around each label are trimmed, so `"keep-open, pinned"` and `"keep-open,pinned"` both work.
+
+## Run Modes
+
+`LOG_OUTPUT` and `DRY_RUN` control how the action reports its work.
+
+- `LOG_OUTPUT` defaults to `true` and prints detailed information about each <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology> that gets locked. You can set it to `false` if you only need the final <Terminology title="the action's single true or false output" to="/docs/reference/terminology#result-output">result output</Terminology>.
+- `DRY_RUN` defaults to `false`. When set to `true`, the action identifies <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> that would be locked but doesn't lock them or post comments — useful for verifying your <Terminology title="the parsed, validated action settings" to="/docs/reference/terminology#configuration">configuration</Terminology> before enabling it.
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+with:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DRY_RUN: "true"
+  LOG_OUTPUT: "true"
+```
+
+You can combine both to preview exactly what the action would do with full logging, then remove `DRY_RUN` (or set it to `false`) once you're satisfied with the results.

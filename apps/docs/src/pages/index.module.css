@@ -1,0 +1,231 @@
+.hero {
+  overflow-x: clip;
+}
+
+.heroInner {
+  max-width: var(--nova-grid-container-max);
+  margin-inline: auto;
+  padding-inline: var(--nova-grid-padding);
+  padding-block: clamp(3rem, 8vh, 5rem);
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* =====================================================================
+   Hero content (left column — 65%)
+   ===================================================================== */
+
+.heroContent {
+  flex: 65;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.heroContent :global(.nova-hero-eyebrow),
+.heroContent :global(.nova-hero-heading),
+.heroContent :global(.nova-hero-tagline),
+.heroContent :global(.nova-hero-actions) {
+  margin: 0;
+}
+
+.heroContent :global(.nova-hero-tagline) {
+  max-width: none;
+}
+
+.heroActions {
+  justify-content: flex-start;
+}
+
+/* =====================================================================
+   Thread Timeline (right column — 35%)
+   ===================================================================== */
+
+.timeline {
+  flex: 35;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.34375rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 1px;
+  background: var(--nova-color-border);
+}
+
+/* =====================================================================
+   Timeline steps
+   ===================================================================== */
+
+.tlStep {
+  position: relative;
+  padding: 0.5rem 0 0.75rem 0;
+}
+
+.tlDot {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.625rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--nova-color-border);
+  border: 2px solid var(--nova-color-surface);
+  box-shadow: 0 0 0 1px var(--nova-color-border);
+}
+
+.tlDotGreen {
+  background: var(--nova-color-accent-600);
+  box-shadow: 0 0 0 1px var(--nova-color-accent-600);
+}
+
+.tlDotRed {
+  background: var(--nova-color-secondary-600, #8b2020);
+  box-shadow: 0 0 0 1px var(--nova-color-secondary-600, #8b2020);
+}
+
+.tlTime {
+  font-family: var(--nova-font-code);
+  font-size: 0.6875rem;
+  color: var(--nova-color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tlLabel {
+  font-family: var(--nova-font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--nova-color-text);
+  margin-top: 0.125rem;
+}
+
+.tlDesc {
+  font-family: var(--nova-font-body);
+  font-size: 0.75rem;
+  color: var(--nova-color-text-muted);
+  margin-top: 0.125rem;
+  line-height: 1.5;
+}
+
+.tlComment {
+  margin-top: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--nova-color-accent-600);
+  background: var(--nova-color-surface-raised);
+  border-radius: 0 2px 2px 0;
+  font-family: var(--nova-font-body);
+  font-size: 0.6875rem;
+  font-style: italic;
+  color: var(--nova-color-text-muted);
+  line-height: 1.6;
+}
+
+.tlBadge {
+  display: inline-block;
+  margin-top: 0.375rem;
+  font-family: var(--nova-font-code);
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nova-color-secondary-600, #8b2020) 10%, transparent);
+  color: var(--nova-color-secondary-600, #8b2020);
+}
+
+/* =====================================================================
+   Animation — staggered timeline reveal
+   ===================================================================== */
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tlStep {
+    opacity: 0;
+    animation: stepIn 0.4s ease-out forwards;
+  }
+
+  .tlStep:nth-child(1) {
+    animation-delay: 0.15s;
+  }
+
+  .tlStep:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+
+  .tlStep:nth-child(3) {
+    animation-delay: 0.65s;
+  }
+
+  .tlStep:nth-child(4) {
+    animation-delay: 0.9s;
+  }
+}
+
+/* =====================================================================
+   Mobile — stack vertically
+   ===================================================================== */
+
+/* =====================================================================
+   Dark mode — brighter timeline colors
+   ===================================================================== */
+
+:global([data-theme="dark"]) .tlDotGreen {
+  background: var(--nova-color-accent-400);
+  box-shadow: 0 0 0 1px var(--nova-color-accent-400);
+}
+
+:global([data-theme="dark"]) .tlDotRed {
+  background: #e05050;
+  box-shadow: 0 0 0 1px #e05050;
+}
+
+:global([data-theme="dark"]) .tlComment {
+  border-left-color: var(--nova-color-accent-400);
+}
+
+:global([data-theme="dark"]) .tlBadge {
+  background: color-mix(in srgb, #e05050 15%, transparent);
+  color: #f07070;
+}
+
+/* =====================================================================
+   Mobile — stack vertically
+   ===================================================================== */
+
+@media (max-width: 1024px) {
+  .heroInner {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .heroActions {
+    justify-content: center;
+  }
+
+  .timeline {
+    max-width: 22rem;
+    width: 100%;
+    text-align: left;
+  }
+}

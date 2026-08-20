@@ -1,0 +1,22 @@
+{
+    "name": "Lock Inactive Threads",
+    "short_name": "Lock Inactive Threads",
+    "icons": [
+        {
+            "src": "/lock-inactive-threads/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/lock-inactive-threads/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "theme_color": "#1B6B5A",
+    "background_color": "#E0EDE8",
+    "start_url": "/lock-inactive-threads/",
+    "display": "standalone"
+}

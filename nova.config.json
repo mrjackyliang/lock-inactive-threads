@@ -1,0 +1,393 @@
+{
+  "project": {
+    "name": {
+      "title": "Lock Inactive Threads",
+      "slug": "lock-inactive-threads"
+    },
+    "description": {
+      "short": "A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days",
+      "long": "GitHub Action that locks closed issues and pull requests once they have gone quiet for a configurable number of days. Issues and pull requests each get their own inactivity window, comment text, and GitHub lock reason. Excluded labels are skipped, and a dry run lists every thread it would lock \u2014 number, title, and last activity \u2014 before anything changes."
+    },
+    "keywords": [
+      "actions",
+      "github-actions",
+      "lock-threads",
+      "inactive-issues",
+      "stale"
+    ],
+    "legalName": "Jacky Liang",
+    "pronouns": "personal",
+    "platforms": [
+      "nodejs"
+    ],
+    "startingYear": 2026,
+    "license": "MIT"
+  },
+  "entities": [
+    {
+      "name": "Jacky Liang",
+      "email": "hello@mrjackyliang.com",
+      "url": "https://www.mrjackyliang.com",
+      "roles": [
+        "author"
+      ]
+    }
+  ],
+  "emails": {
+    "bugs": "bugs@mrjackyliang.com"
+  },
+  "github": {
+    "owner": "mrjackyliang",
+    "repo": "lock-inactive-threads",
+    "features": {
+      "issues": true,
+      "wiki": false,
+      "projects": false,
+      "discussions": false
+    },
+    "policies": {
+      "visibility": "public",
+      "defaultBranch": "main",
+      "mergeMethods": {
+        "merge": true,
+        "squash": true,
+        "rebase": true
+      },
+      "autoDeleteHeadBranch": true
+    }
+  },
+  "workflows": [
+    {
+      "template": "check-sponsor-gated-issues",
+      "name": "sponsor-check",
+      "triggers": [
+        "issue-comment",
+        "issues"
+      ]
+    },
+    {
+      "template": "lock-inactive-issues",
+      "name": "lock-inactive",
+      "triggers": [
+        "schedule-daily"
+      ]
+    },
+    {
+      "template": "publish",
+      "name": "project",
+      "triggers": [
+        "release"
+      ],
+      "build": [
+        "./packages/lock-inactive-threads",
+        "./apps/docs"
+      ],
+      "deploy": [
+        {
+          "to": "github-action",
+          "path": "./packages/lock-inactive-threads"
+        },
+        {
+          "to": "github-pages-docusaurus",
+          "path": "./apps/docs"
+        }
+      ],
+      "with": {
+        "ACTION_ENTRY_POINT": "index.js",
+        "ACTION_OUTPUT_PATH": "./packages/lock-inactive-threads/build",
+        "ACTION_YML_PATH": "./action.yml",
+        "RELEASE_BRANCH_NAME": "releases"
+      }
+    }
+  ],
+  "urls": {
+    "homepage": "https://github.com/mrjackyliang/lock-inactive-threads",
+    "repository": "git+https://github.com/mrjackyliang/lock-inactive-threads.git",
+    "bugs": "https://github.com/mrjackyliang/lock-inactive-threads/issues",
+    "license": "https://github.com/mrjackyliang/lock-inactive-threads/blob/HEAD/LICENSE",
+    "documentation": "https://mrjackyliang.github.io/lock-inactive-threads/",
+    "fundSources": [
+      "https://github.com/sponsors/mrjackyliang",
+      "https://liang.nyc/paypal"
+    ]
+  },
+  "workspaces": {
+    "./": {
+      "role": "project",
+      "policy": "freezable",
+      "name": "lock-inactive-threads-project"
+    },
+    "./apps/docs": {
+      "role": "docs",
+      "policy": "freezable",
+      "name": "lock-inactive-threads-docs"
+    },
+    "./packages/lock-inactive-threads": {
+      "role": "package",
+      "policy": "distributable",
+      "name": "lock-inactive-threads"
+    }
+  },
+  "gitignore": {
+    "projectExcludes": [
+      "graphify-out/"
+    ]
+  },
+  "agents": [
+    "claude-code",
+    "codex"
+  ],
+  "recipes": {
+    "github": {
+      "sync-features": {
+        "enabled": true
+      },
+      "sync-identity": {
+        "enabled": true
+      },
+      "sync-policies": {
+        "enabled": true
+      }
+    },
+    "license": {
+      "update-copyright": {
+        "enabled": true
+      }
+    },
+    "read-me": {
+      "update-badges": {
+        "enabled": true
+      },
+      "update-credits": {
+        "enabled": true
+      },
+      "update-documentation": {
+        "enabled": true
+      },
+      "update-header": {
+        "enabled": true
+      },
+      "update-introduction": {
+        "enabled": true
+      }
+    },
+    "package-json": {
+      "./": {
+        "cleanup": {
+          "enabled": true,
+          "settings": {
+            "removeUnknownKeys": true,
+            "reorderKeys": true
+          }
+        },
+        "normalize-artifacts": {
+          "enabled": true
+        },
+        "normalize-bundler": {
+          "enabled": true
+        },
+        "normalize-dependencies": {
+          "enabled": true,
+          "settings": {
+            "pinDependencyVersions": true,
+            "pinDevDependencyVersions": true
+          }
+        },
+        "normalize-modules": {
+          "enabled": true
+        },
+        "normalize-tooling": {
+          "enabled": true
+        },
+        "sync-environment": {
+          "enabled": true,
+          "settings": {
+            "trackNodeLtsVersions": true
+          }
+        },
+        "sync-identity": {
+          "enabled": true
+        },
+        "sync-ownership": {
+          "enabled": true
+        }
+      },
+      "./packages/lock-inactive-threads": {
+        "cleanup": {
+          "enabled": true,
+          "settings": {
+            "removeUnknownKeys": true,
+            "reorderKeys": true
+          }
+        },
+        "normalize-artifacts": {
+          "enabled": true
+        },
+        "normalize-bundler": {
+          "enabled": true
+        },
+        "normalize-dependencies": {
+          "enabled": true,
+          "settings": {
+            "pinDependencyVersions": true,
+            "pinDevDependencyVersions": true
+          }
+        },
+        "normalize-modules": {
+          "enabled": true
+        },
+        "normalize-tooling": {
+          "enabled": true
+        },
+        "sync-environment": {
+          "enabled": true,
+          "settings": {
+            "trackNodeLtsVersions": true
+          }
+        },
+        "sync-identity": {
+          "enabled": true,
+          "settings": {
+            "description": true,
+            "keywords": true
+          }
+        },
+        "sync-ownership": {
+          "enabled": true,
+          "settings": {
+            "homepage": true,
+            "bugs": true,
+            "author": true,
+            "contributors": true,
+            "funding": true,
+            "repository": true
+          }
+        }
+      },
+      "./apps/docs": {
+        "cleanup": {
+          "enabled": true,
+          "settings": {
+            "removeUnknownKeys": true,
+            "reorderKeys": true
+          }
+        },
+        "normalize-artifacts": {
+          "enabled": true
+        },
+        "normalize-bundler": {
+          "enabled": true
+        },
+        "normalize-dependencies": {
+          "enabled": true,
+          "settings": {
+            "pinDependencyVersions": true,
+            "pinDevDependencyVersions": true
+          }
+        },
+        "normalize-modules": {
+          "enabled": true
+        },
+        "normalize-tooling": {
+          "enabled": true
+        },
+        "sync-environment": {
+          "enabled": true,
+          "settings": {
+            "trackNodeLtsVersions": true
+          }
+        },
+        "sync-identity": {
+          "enabled": true
+        },
+        "sync-ownership": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "environment": {
+    "project": {
+      "prefix": "PROJECT_"
+    },
+    "workspaces": {
+      "./": {
+        "prefix": "ROOT_"
+      },
+      "./packages/lock-inactive-threads": {
+        "prefix": "LIT_",
+        "variables": [
+          {
+            "key": "ACTIONS_RUNNER_DEBUG",
+            "reach": "local",
+            "defaultValue": "false"
+          },
+          {
+            "key": "ACTIONS_STEP_DEBUG",
+            "reach": "local",
+            "defaultValue": "false"
+          },
+          {
+            "key": "INPUT_GITHUB_TOKEN",
+            "reach": "local",
+            "defaultValue": ""
+          },
+          {
+            "key": "INPUT_ISSUE_COMMENT",
+            "reach": "local",
+            "defaultValue": "Due to inactivity, this issue will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new issue."
+          },
+          {
+            "key": "INPUT_ISSUE_INACTIVE_DAYS",
+            "reach": "local",
+            "defaultValue": "30"
+          },
+          {
+            "key": "INPUT_ISSUE_LOCK_REASON",
+            "reach": "local",
+            "defaultValue": "resolved"
+          },
+          {
+            "key": "INPUT_PR_COMMENT",
+            "reach": "local",
+            "defaultValue": "Due to inactivity, this pull request will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new pull request."
+          },
+          {
+            "key": "INPUT_PR_INACTIVE_DAYS",
+            "reach": "local",
+            "defaultValue": "30"
+          },
+          {
+            "key": "INPUT_PR_LOCK_REASON",
+            "reach": "local",
+            "defaultValue": "resolved"
+          },
+          {
+            "key": "INPUT_EXCLUDE_LABELS",
+            "reach": "local",
+            "defaultValue": ""
+          },
+          {
+            "key": "INPUT_LOG_OUTPUT",
+            "reach": "local",
+            "defaultValue": "true"
+          },
+          {
+            "key": "INPUT_DRY_RUN",
+            "reach": "local",
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    "workflows": {
+      "sponsor-check": {
+        "prefix": "SGS_"
+      }
+    }
+  },
+  "settings": {
+    "lockStepVersioning": true,
+    "versionStrategy": "semver"
+  }
+}

@@ -36,7 +36,7 @@ inputs:
     required: false
     default: "resolved"
   EXCLUDE_LABELS:
-    description: "Labels to exclude from locking (comma de-limited list)"
+    description: "Labels to exclude from locking (comma-delimited list)"
     required: false
     default: ""
   LOG_OUTPUT:
@@ -53,5 +53,5 @@ outputs:
     description: "The success or failure response after the action has completed"
 
 runs:
-  using: "node20"
-  main: "./build/index.js"
+  using: "node22"
+  main: "./packages/lock-inactive-threads/build/index.js"

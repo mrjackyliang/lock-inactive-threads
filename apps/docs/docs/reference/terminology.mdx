@@ -1,0 +1,61 @@
+---
+id: "terminology"
+title: "Terminology"
+sidebar_position: 3
+description: "Review the terminology and concepts used throughout the Lock Inactive Threads documentation, from threads and inactivity windows to lock reasons and dry runs."
+keywords:
+  - "lock inactive threads"
+  - "terminology"
+  - "glossary"
+  - "concepts"
+  - "definitions"
+tags:
+  - "reference"
+  - "terminology"
+---
+
+Defines the terms and concepts used throughout this documentation.
+
+## Thread
+
+An issue or a pull request. The action processes both types independently, each with its own comment, inactivity window, and lock reason.
+
+## Inactive Thread
+
+A closed, unlocked thread whose last update is older than the configured inactivity window. The action finds these using GitHub search qualifiers (`is:closed is:unlocked updated:<=date`).
+
+## Inactivity Window
+
+The number of days without updates before a thread counts as inactive. Set per type via `ISSUE_INACTIVE_DAYS` and `PR_INACTIVE_DAYS`, both defaulting to 30.
+
+## Lock Reason
+
+GitHub's native reason attached to a locked thread: `off-topic`, `resolved`, `spam`, or `too heated`. The default is `resolved`.
+
+## Closing Comment
+
+The comment posted to a thread immediately before it is locked. You can set custom text via `ISSUE_COMMENT` and `PR_COMMENT`, or leave them empty to use the built-in defaults.
+
+## Exclude Labels
+
+A comma-delimited list of label names passed through `EXCLUDE_LABELS`. Any thread carrying a matching label is skipped during locking, even if it meets the inactivity threshold.
+
+## Dry Run
+
+A mode enabled by setting `DRY_RUN` to `true`. The action logs which threads would be locked without commenting on or locking anything.
+
+## Action Input
+
+A `with:` value from the consuming workflow, surfaced to the action as an `INPUT_*` environment variable.
+
+## Configuration
+
+The parsed object produced from the raw inputs: coerced numbers, boolean flags, a trimmed label array, and defaulted comments.
+
+## Log Output
+
+A mode controlled by `LOG_OUTPUT` (default `true`) that prints the found-count line and per-thread locking details during a live run. Setting it to `false` suppresses those details.
+
+## Result Output
+
+The action's single output, set to `true` when the run (or dry run) completes, or `false` when one or more threads fail to lock or an unexpected error occurs.
