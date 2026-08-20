@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.2 - 2026-08-20
+
+### UPDATED
+- Added a webpack version override (<5.106.0) to the docs site to prevent the Docusaurus 3.10 Progress Plugin incompatibility with webpack 5.106.0 and later
+
+### REMOVED
+- Removed stale npm-run-all and rimraf dev dependencies that were replaced by Nova internal tooling during the monorepo migration
+
 ## 1.0.1 - 2026-08-20
 
 ### UPDATED
