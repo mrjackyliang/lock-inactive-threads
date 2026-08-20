@@ -1,0 +1,7 @@
+import type { Lib_Utility_AddThreadComment_Body, Lib_Utility_AddThreadComment_Config, Lib_Utility_AddThreadComment_IssueNumber, Lib_Utility_AddThreadComment_Returns, Lib_Utility_GetConfig_Returns, Lib_Utility_GetContext_Returns, Lib_Utility_GetInactiveThreads_Config, Lib_Utility_GetInactiveThreads_Returns, Lib_Utility_GetInactiveThreads_Type, Lib_Utility_LockThread_Config, Lib_Utility_LockThread_IssueNumber, Lib_Utility_LockThread_LockReason, Lib_Utility_LockThread_Returns } from '../types/lib/utility.d.ts';
+export declare function addThreadComment(issueNumber: Lib_Utility_AddThreadComment_IssueNumber, body: Lib_Utility_AddThreadComment_Body, config: Lib_Utility_AddThreadComment_Config): Lib_Utility_AddThreadComment_Returns;
+export declare function getConfig(): Lib_Utility_GetConfig_Returns;
+export declare function getContext(): Lib_Utility_GetContext_Returns;
+export declare function getInactiveThreads(config: Lib_Utility_GetInactiveThreads_Config, type: Lib_Utility_GetInactiveThreads_Type): Lib_Utility_GetInactiveThreads_Returns;
+export declare function lockThread(issueNumber: Lib_Utility_LockThread_IssueNumber, lockReason: Lib_Utility_LockThread_LockReason, config: Lib_Utility_LockThread_Config): Lib_Utility_LockThread_Returns;
+//# sourceMappingURL=utility.d.ts.map
