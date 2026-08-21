@@ -1,5 +1,10 @@
 # lock-inactive-threads
 
+## 1.0.3 - 2026-08-20
+
+### UPDATED
+- Updated the project homepage URL to point to the documentation site and added a logo URL for README branding.
+
 ## 1.0.2 - 2026-08-20
 
 ### UPDATED
