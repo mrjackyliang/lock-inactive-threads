@@ -101,10 +101,11 @@
     }
   ],
   "urls": {
-    "homepage": "https://github.com/mrjackyliang/lock-inactive-threads",
+    "homepage": "https://mrjackyliang.github.io/lock-inactive-threads/",
     "repository": "git+https://github.com/mrjackyliang/lock-inactive-threads.git",
     "bugs": "https://github.com/mrjackyliang/lock-inactive-threads/issues",
     "license": "https://github.com/mrjackyliang/lock-inactive-threads/blob/HEAD/LICENSE",
+    "logo": "https://mrjackyliang.github.io/lock-inactive-threads/images/logo.svg",
     "documentation": "https://mrjackyliang.github.io/lock-inactive-threads/",
     "fundSources": [
       "https://github.com/sponsors/mrjackyliang",

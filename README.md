@@ -8,9 +8,12 @@
 
 <div align="center">
 <!-- nova-region: header -->
-  <a href="https://github.com/mrjackyliang/lock-inactive-threads">
-    <h1>Lock Inactive Threads</h1>
+  <a href="https://mrjackyliang.github.io/lock-inactive-threads/">
+    <picture>
+      <img alt="Lock Inactive Threads" src="https://mrjackyliang.github.io/lock-inactive-threads/images/logo.svg" height="128">
+    </picture>
   </a>
+  <h1>Lock Inactive Threads</h1>
 <!-- nova-region-end: header -->
 <!-- nova-region: badges -->
   <a href="https://github.com/mrjackyliang/lock-inactive-threads/releases">
