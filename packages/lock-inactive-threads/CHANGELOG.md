@@ -1,17 +1,15 @@
 # lock-inactive-threads
 
-## 1.0.3 - 2026-08-20
-
-### UPDATED
-- Updated @cbnventures/nova to 0.25.2 and @cbnventures/docusaurus-preset-nova to 0.25.2, regenerated CI workflows, removed stale root CHANGELOG.md leftover from the pre-monorepo layout, and removed a redundant workspace-level webpack override that npm ignores.
-
 ## 1.0.2 - 2026-08-20
 
 ### UPDATED
-- Added a webpack version override (<5.106.0) to the docs site to prevent the Docusaurus 3.10 Progress Plugin incompatibility with webpack 5.106.0 and later
+- Updated @cbnventures/nova to 0.25.2 and @cbnventures/docusaurus-preset-nova to 0.25.2.
+- Regenerated CI workflows with the updated Nova GitHub Action publish template.
+- Tightened the root webpack version override to >=5.95.0 <5.106.0 to prevent the Docusaurus 3.10 Progress Plugin incompatibility with webpack 5.106.0 and later.
 
 ### REMOVED
-- Removed stale npm-run-all and rimraf dev dependencies that were replaced by Nova internal tooling during the monorepo migration
+- Removed stale npm-run-all and rimraf dev dependencies that were replaced by Nova internal tooling during the monorepo migration.
+- Removed stale root CHANGELOG.md leftover from the pre-monorepo layout and merged its v1.0.0 entry into the package-level changelog.
 
 ## 1.0.1 - 2026-08-20
 
