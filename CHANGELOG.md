@@ -1,5 +1,10 @@
 # lock-inactive-threads
 
+## 1.0.4 - 2026-08-21
+
+### FIXED
+- Updated the GitHub Action runtime from Node 22 to Node 24 to resolve the GitHub Actions runner deprecation of the node22 runtime.
+
 ## 1.0.3 - 2026-08-20
 
 ### UPDATED
