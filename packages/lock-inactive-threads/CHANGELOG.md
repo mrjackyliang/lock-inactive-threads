@@ -1,5 +1,10 @@
 # lock-inactive-threads
 
+## 1.0.3 - 2026-08-20
+
+### UPDATED
+- Updated @cbnventures/nova to 0.25.2 and @cbnventures/docusaurus-preset-nova to 0.25.2, regenerated CI workflows, removed stale root CHANGELOG.md leftover from the pre-monorepo layout, and removed a redundant workspace-level webpack override that npm ignores.
+
 ## 1.0.2 - 2026-08-20
 
 ### UPDATED
@@ -26,3 +31,14 @@
 - Added Nova AI agent convention scaffolding (AGENTS.md, CLAUDE.md, PROJECT_RULES.md, VISION.md) along with per-language coding convention references covering TypeScript, Python, Swift, Kotlin, Java, C#, PHP, Shell, Docker, CSS, and documentation.
 - Added a new Docusaurus documentation site (apps/docs) with a landing page, overview, usage guide, inputs/outputs reference, and terminology glossary, plus content self-check tests for frontmatter, links, markdown tables, and terminology; the README now links to it as the primary documentation source.
 - Adopted Nova must-haves generators for .env.sample (root and package-scoped), .editorconfig, and .gitignore, replacing hand-maintained versions with regeneratable equivalents.
+
+## 1.0.0 - 2026-03-10
+
+### ADDED
+- GitHub Action to lock inactive issues and pull requests after configurable days of inactivity.
+- Separate configuration for issues and pull requests (comment, inactive days, lock reason).
+- Label exclusion support via comma-delimited `EXCLUDE_LABELS` input.
+- Dry-run mode to preview what would be locked without making changes.
+- Detailed logging with `LOG_OUTPUT` toggle.
+- GitHub search API integration with pagination (up to 1,000 threads per type).
+- Zod schema validation for all action inputs.

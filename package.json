@@ -23,7 +23,7 @@
     "node": "^22 || ^24"
   },
   "devDependencies": {
-    "@cbnventures/nova": "0.25.1",
+    "@cbnventures/nova": "0.25.2",
     "jiti": "2.6.1",
     "turbo": "2.10.6",
     "typescript": "5.9.3"
