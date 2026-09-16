@@ -16,6 +16,8 @@ tags:
 ---
 
 import { Terminology } from '@cbnventures/docusaurus-preset-nova/blocks';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 Set up Lock Inactive Threads as a scheduled GitHub Actions workflow that automatically locks stale issues and pull requests in your repository.
 
@@ -27,36 +29,74 @@ Set up Lock Inactive Threads as a scheduled GitHub Actions workflow that automat
 
 ## Basic Workflow
 
-The minimal workflow below runs the action daily at midnight UTC and supports manual dispatch with a <Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">dry-run</Terminology> toggle. `GITHUB_TOKEN` is the only required input — all other inputs fall back to sensible defaults.
+Choose a daily run for active repositories or a weekly run when one maintenance pass is enough. Both workflows support manual dispatch with a <Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">dry-run</Terminology> toggle, and `GITHUB_TOKEN` is the only required input.
 
-```yaml title=".github/workflows/lock-inactive-threads.yml"
-name: "Lock Inactive Threads"
+<Tabs groupId="usage-schedule">
+  <TabItem value="daily" label="Daily" default>
 
-on:
-  schedule:
-    - cron: "0 0 * * *"
-  workflow_dispatch:
-    inputs:
-      dry-run:
-        description: "Run without making changes"
-        required: false
-        type: "boolean"
-        default: true
+    ```yaml title=".github/workflows/lock-inactive-threads.yml"
+    name: "Lock Inactive Threads"
 
-permissions:
-  issues: "write"
-  pull-requests: "write"
+    on:
+      schedule:
+        - cron: "0 0 * * *"
+      workflow_dispatch:
+        inputs:
+          dry-run:
+            description: "Run without making changes"
+            required: false
+            type: "boolean"
+            default: true
 
-jobs:
-  lock-inactive-threads:
-    runs-on: "ubuntu-latest"
-    timeout-minutes: 5
-    steps:
-      - uses: "mrjackyliang/lock-inactive-threads@v1"
-        with:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          DRY_RUN: "${{ github.event_name == 'workflow_dispatch' && inputs.dry-run || 'false' }}"
-```
+    permissions:
+      issues: "write"
+      pull-requests: "write"
+
+    jobs:
+      lock-inactive-threads:
+        runs-on: "ubuntu-latest"
+        timeout-minutes: 5
+        steps:
+          - uses: "mrjackyliang/lock-inactive-threads@v1"
+            with:
+              GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              DRY_RUN: "${{ github.event_name == 'workflow_dispatch' && inputs.dry-run || 'false' }}"
+    ```
+
+  </TabItem>
+  <TabItem value="weekly" label="Weekly">
+
+    ```yaml title=".github/workflows/lock-inactive-threads.yml"
+    name: "Lock Inactive Threads"
+
+    on:
+      schedule:
+        - cron: "0 0 * * 0"
+      workflow_dispatch:
+        inputs:
+          dry-run:
+            description: "Run without making changes"
+            required: false
+            type: "boolean"
+            default: true
+
+    permissions:
+      issues: "write"
+      pull-requests: "write"
+
+    jobs:
+      lock-inactive-threads:
+        runs-on: "ubuntu-latest"
+        timeout-minutes: 5
+        steps:
+          - uses: "mrjackyliang/lock-inactive-threads@v1"
+            with:
+              GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              DRY_RUN: "${{ github.event_name == 'workflow_dispatch' && inputs.dry-run || 'false' }}"
+    ```
+
+  </TabItem>
+</Tabs>
 
 The workflow requires `issues: write` and `pull-requests: write` permissions so the action can post comments and lock <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology>. You can find every available input and its default value on the [inputs](/docs/reference/inputs/) reference page.
 

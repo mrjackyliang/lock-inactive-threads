@@ -1,5 +1,15 @@
 # lock-inactive-threads
 
+## 1.0.5 - 2026-09-16
+
+### UPDATED
+- Updated Nova and its Docusaurus preset to 0.27.0, TypeScript to 6.0.3, Vitest to 4.1.11, Zod to 4.4.3, and related dependencies; adapted inactivity-day coercion to Zod 4.
+- Disabled Turbo caching for build and check tasks so repository commands no longer accumulate persistent Turbo cache artifacts.
+- Renamed the action and docs Vitest configuration files from .ts to .mts, updated their references, and retained the docs @site alias.
+- Added daily and weekly workflow tabs to the usage guide and aligned the repository's generated inactivity maintenance workflow with the weekly schedule.
+- Declared reviewed root dependency install scripts as denied so clean npm installs have an explicit trust policy.
+- Normalized the package author URL to the canonical trailing-slash form.
+
 ## 1.0.4 - 2026-08-21
 
 ### FIXED

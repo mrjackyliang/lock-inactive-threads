@@ -14,9 +14,8 @@ export const configuration = z.object({
     .min(1),
   issueComment: z.string()
     .transform((value) => ((value === '') ? 'Due to inactivity, this issue will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new issue.' : value)),
-  issueInactiveDays: z.number({
-    coerce: true,
-  }).min(1).default(30),
+  issueInactiveDays: z.coerce.number()
+    .min(1).default(30),
   issueLockReason: z.enum([
     'off-topic',
     'resolved',
@@ -25,9 +24,8 @@ export const configuration = z.object({
   ]).default('resolved'),
   prComment: z.string()
     .transform((value) => ((value === '') ? 'Due to inactivity, this pull request will be locked and marked as resolved. If you have any further questions or inquiries, please feel free to open a new pull request.' : value)),
-  prInactiveDays: z.number({
-    coerce: true,
-  }).min(1).default(30),
+  prInactiveDays: z.coerce.number()
+    .min(1).default(30),
   prLockReason: z.enum([
     'off-topic',
     'resolved',
