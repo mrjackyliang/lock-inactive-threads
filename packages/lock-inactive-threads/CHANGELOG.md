@@ -1,5 +1,10 @@
 # lock-inactive-threads
 
+## 1.0.6 - 2026-09-16
+
+### UPDATED
+- Updated Nova and its Docusaurus preset to 0.27.1, and regenerated the publish workflow to use Node 24-ready build attestation and Corepack-managed npm.
+
 ## 1.0.5 - 2026-09-16
 
 ### UPDATED
