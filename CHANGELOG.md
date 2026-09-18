@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.7 - 2026-09-18
+
+### UPDATED
+- Updated Nova and its Docusaurus preset to 0.27.2.
+
+### FIXED
+- Removed a redundant CommonJS export condition from the ESM package manifest so its entry point stays unambiguous.
+
 ## 1.0.6 - 2026-09-16
 
 ### UPDATED
