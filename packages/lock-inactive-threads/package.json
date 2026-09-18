@@ -1,6 +1,6 @@
 {
   "name": "lock-inactive-threads",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days",
   "keywords": [
     "actions",
@@ -31,8 +31,7 @@
   },
   "exports": {
     ".": {
-      "default": "./build/index.js",
-      "require": "./build/index.js"
+      "default": "./build/index.js"
     }
   },
   "main": "./build/index.js",
@@ -60,10 +59,10 @@
   "dependencies": {
     "@actions/core": "1.10.1",
     "@actions/github": "6.0.0",
+    "@cbnventures/nova": "0.27.2",
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@cbnventures/nova": "0.27.1",
     "@github/local-action": "1.5.1",
     "@types/node": "24.9.1",
     "@vercel/ncc": "0.38.1",
