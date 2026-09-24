@@ -38837,6 +38837,11 @@ async function getInactiveThreads(config, type) {
             page,
         });
         for (const item of response.data.items) {
+            const itemType = ('pull_request' in item) ? 'pull-request' : 'issue';
+            if (itemType !== type) {
+                lib_core.warning(`Skipping ${itemType} #${item.number} returned by the ${type} search.`);
+                continue;
+            }
             threads.push({
                 type,
                 number: item.number,
@@ -38866,8 +38871,17 @@ async function lockThread(issueNumber, lockReason, config) {
 
 
 async function lockInactiveThreads(config) {
-    const inactiveIssues = await getInactiveThreads(config, 'issue');
-    const inactivePrs = await getInactiveThreads(config, 'pull-request');
+    const seenThreadNumbers = new Set();
+    const filterUniqueThread = (thread) => {
+        if (seenThreadNumbers.has(thread['number']) === true) {
+            lib_core.warning(`Skipping duplicate ${thread['type']} #${thread['number']} returned by inactive-thread searches.`);
+            return false;
+        }
+        seenThreadNumbers.add(thread['number']);
+        return true;
+    };
+    const inactiveIssues = (await getInactiveThreads(config, 'issue')).filter(filterUniqueThread);
+    const inactivePrs = (await getInactiveThreads(config, 'pull-request')).filter(filterUniqueThread);
     if (config['logOutput'] === true) {
         lib_core.info(`Found ${inactiveIssues.length} inactive issue(s) and ${inactivePrs.length} inactive pull request(s)`);
     }
