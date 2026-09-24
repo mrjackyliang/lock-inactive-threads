@@ -14,6 +14,7 @@ import type {
   Lib_Utility_GetInactiveThreads_Config,
   Lib_Utility_GetInactiveThreads_DateStr,
   Lib_Utility_GetInactiveThreads_InactiveDays,
+  Lib_Utility_GetInactiveThreads_ItemType,
   Lib_Utility_GetInactiveThreads_LabelExclusions,
   Lib_Utility_GetInactiveThreads_Octokit,
   Lib_Utility_GetInactiveThreads_Page,
@@ -139,6 +140,14 @@ export async function getInactiveThreads(config: Lib_Utility_GetInactiveThreads_
     });
 
     for (const item of response.data.items) {
+      const itemType: Lib_Utility_GetInactiveThreads_ItemType = ('pull_request' in item) ? 'pull-request' : 'issue';
+
+      if (itemType !== type) {
+        core.warning(`Skipping ${itemType} #${item.number} returned by the ${type} search.`);
+
+        continue;
+      }
+
       threads.push({
         type,
         number: item.number,

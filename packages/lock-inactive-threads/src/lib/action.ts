@@ -9,9 +9,11 @@ import {
 import type {
   Lib_Action_LockInactiveThreads_Config,
   Lib_Action_LockInactiveThreads_FailureCount,
+  Lib_Action_LockInactiveThreads_FilterUniqueThread,
   Lib_Action_LockInactiveThreads_InactiveIssues,
   Lib_Action_LockInactiveThreads_InactivePrs,
   Lib_Action_LockInactiveThreads_Returns,
+  Lib_Action_LockInactiveThreads_SeenThreadNumbers,
   Lib_Action_LockInactiveThreads_SuccessCount,
   Lib_Action_LockInactiveThreads_TotalCount,
 } from '../types/lib/action.d.ts';
@@ -30,8 +32,35 @@ import type {
  * @since 1.0.0
  */
 export async function lockInactiveThreads(config: Lib_Action_LockInactiveThreads_Config): Lib_Action_LockInactiveThreads_Returns {
-  const inactiveIssues: Lib_Action_LockInactiveThreads_InactiveIssues = await getInactiveThreads(config, 'issue');
-  const inactivePrs: Lib_Action_LockInactiveThreads_InactivePrs = await getInactiveThreads(config, 'pull-request');
+  const seenThreadNumbers: Lib_Action_LockInactiveThreads_SeenThreadNumbers = new Set();
+
+  /**
+   * Lib - Action - Lock Inactive Threads - Filter Unique Thread.
+   *
+   * Keeps the first occurrence of each GitHub thread number and warns when
+   * either search returns a thread that has already been collected.
+   *
+   * @param {Lib_Action_LockInactiveThreads_FilterUniqueThread_Thread} thread - Thread.
+   *
+   * @private
+   *
+   * @returns {Lib_Action_LockInactiveThreads_FilterUniqueThread_Returns}
+   *
+   * @since 1.0.8
+   */
+  const filterUniqueThread: Lib_Action_LockInactiveThreads_FilterUniqueThread = (thread) => {
+    if (seenThreadNumbers.has(thread['number']) === true) {
+      core.warning(`Skipping duplicate ${thread['type']} #${thread['number']} returned by inactive-thread searches.`);
+
+      return false;
+    }
+
+    seenThreadNumbers.add(thread['number']);
+
+    return true;
+  };
+  const inactiveIssues: Lib_Action_LockInactiveThreads_InactiveIssues = (await getInactiveThreads(config, 'issue')).filter(filterUniqueThread);
+  const inactivePrs: Lib_Action_LockInactiveThreads_InactivePrs = (await getInactiveThreads(config, 'pull-request')).filter(filterUniqueThread);
 
   if (config['logOutput'] === true) {
     core.info(`Found ${inactiveIssues.length} inactive issue(s) and ${inactivePrs.length} inactive pull request(s)`);

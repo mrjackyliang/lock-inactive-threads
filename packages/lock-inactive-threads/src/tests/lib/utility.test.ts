@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import * as github from '@actions/github';
 import {
   afterEach,
@@ -32,6 +33,14 @@ import type {
   Tests_Lib_Utility_GetInactiveThreads_ReturnsMappedThreadObjects_MockOctokit,
   Tests_Lib_Utility_GetInactiveThreads_ReturnsMappedThreadObjects_MockSearchFn,
   Tests_Lib_Utility_GetInactiveThreads_ReturnsMappedThreadObjects_Result,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Config,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockOctokit,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockSearchFn,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Result,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Config,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockOctokit,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockSearchFn,
+  Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Result,
   Tests_Lib_Utility_GetInactiveThreads_StopsAtPage10Cap_Config,
   Tests_Lib_Utility_GetInactiveThreads_StopsAtPage10Cap_MockOctokit,
   Tests_Lib_Utility_GetInactiveThreads_StopsAtPage10Cap_MockSearchFn,
@@ -469,6 +478,126 @@ describe('getInactiveThreads', () => {
         updatedAt: '2024-02-20T14:00:00Z',
       },
     ]);
+
+    return;
+  });
+
+  it('skips issues returned by pull request search', async () => {
+    const mockSearchFn: Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockSearchFn = vi.fn().mockResolvedValue({
+      data: {
+        items: [
+          {
+            number: 153,
+            title: 'Node 24 Support?',
+            updated_at: '2026-08-01T00:00:00Z',
+          },
+          {
+            number: 155,
+            title: 'Update dependencies',
+            updated_at: '2026-08-02T00:00:00Z',
+            pull_request: {},
+          },
+        ],
+      },
+    });
+    const mockOctokit: Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockOctokit = { rest: { search: { issuesAndPullRequests: mockSearchFn } } };
+
+    // @ts-expect-error Partial mock structure.
+    vi.spyOn(github, 'getOctokit').mockReturnValue(mockOctokit);
+
+    vi.spyOn(core, 'warning').mockImplementation(() => undefined);
+
+    Object.defineProperty(github.context, 'repo', {
+      value: {
+        owner: 'test-owner',
+        repo: 'test-repo',
+      },
+      configurable: true,
+    });
+
+    const config: Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Config = {
+      githubToken: 'ghp_test123',
+      issueComment: 'Locking issue.',
+      issueInactiveDays: 30,
+      issueLockReason: 'resolved' as const,
+      prComment: 'Locking PR.',
+      prInactiveDays: 30,
+      prLockReason: 'resolved' as const,
+      excludeLabels: [],
+      logOutput: true,
+      dryRun: false,
+    };
+
+    const result: Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Result = await getInactiveThreads(config, 'pull-request');
+
+    expect(result).toStrictEqual([{
+      type: 'pull-request',
+      number: 155,
+      title: 'Update dependencies',
+      updatedAt: '2026-08-02T00:00:00Z',
+    }]);
+
+    expect(core.warning).toHaveBeenCalledWith('Skipping issue #153 returned by the pull-request search.');
+
+    return;
+  });
+
+  it('skips pull requests returned by issue search', async () => {
+    const mockSearchFn: Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockSearchFn = vi.fn().mockResolvedValue({
+      data: {
+        items: [
+          {
+            number: 155,
+            title: 'Update dependencies',
+            updated_at: '2026-08-02T00:00:00Z',
+            pull_request: {},
+          },
+          {
+            number: 153,
+            title: 'Node 24 Support?',
+            updated_at: '2026-08-01T00:00:00Z',
+          },
+        ],
+      },
+    });
+    const mockOctokit: Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockOctokit = { rest: { search: { issuesAndPullRequests: mockSearchFn } } };
+
+    // @ts-expect-error Partial mock structure.
+    vi.spyOn(github, 'getOctokit').mockReturnValue(mockOctokit);
+
+    vi.spyOn(core, 'warning').mockImplementation(() => undefined);
+
+    Object.defineProperty(github.context, 'repo', {
+      value: {
+        owner: 'test-owner',
+        repo: 'test-repo',
+      },
+      configurable: true,
+    });
+
+    const config: Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Config = {
+      githubToken: 'ghp_test123',
+      issueComment: 'Locking issue.',
+      issueInactiveDays: 30,
+      issueLockReason: 'resolved' as const,
+      prComment: 'Locking PR.',
+      prInactiveDays: 30,
+      prLockReason: 'resolved' as const,
+      excludeLabels: [],
+      logOutput: true,
+      dryRun: false,
+    };
+
+    const result: Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Result = await getInactiveThreads(config, 'issue');
+
+    expect(result).toStrictEqual([{
+      type: 'issue',
+      number: 153,
+      title: 'Node 24 Support?',
+      updatedAt: '2026-08-01T00:00:00Z',
+    }]);
+
+    expect(core.warning).toHaveBeenCalledWith('Skipping pull-request #155 returned by the issue search.');
 
     return;
   });

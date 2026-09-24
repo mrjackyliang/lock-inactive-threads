@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.8 - 2026-09-23
+
+### UPDATED
+- Updated Nova and its Docusaurus preset to 0.27.3.
+
+### FIXED
+- Validated GitHub Search result types and deduplicated thread numbers before mutation, preventing mismatched issue and pull request results from being processed twice.
+
 ## 1.0.7 - 2026-09-18
 
 ### UPDATED

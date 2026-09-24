@@ -144,6 +144,41 @@ export type Tests_Lib_Action_LockInactiveThreads_RealModeCommentsAndLocksEachThr
 export type Tests_Lib_Action_LockInactiveThreads_RealModeCommentsAndLocksEachThread_MockLockThread = MockedFunction<typeof lockThread>;
 
 /**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Duplicate Thread Numbers Across Searches.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_Config = z.infer<typeof configuration>;
+
+/**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Duplicate Thread Numbers Across Searches.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockGetInactiveThreads = MockedFunction<typeof getInactiveThreads>;
+
+/**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Duplicate Thread Numbers Across Searches.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockAddThreadComment = MockedFunction<typeof addThreadComment>;
+
+/**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Duplicate Thread Numbers Across Searches.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockLockThread = MockedFunction<typeof lockThread>;
+
+/**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Duplicate Thread Numbers Across Searches.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockWarning = MockedFunction<typeof warning>;
+
+/**
  * Tests - Lib - Action - Lock Inactive Threads - Zero Inactive Threads Sets Output Without Locking.
  *
  * @since 1.0.0

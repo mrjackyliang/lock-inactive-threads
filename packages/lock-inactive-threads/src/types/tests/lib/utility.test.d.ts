@@ -159,6 +159,48 @@ export type Tests_Lib_Utility_GetInactiveThreads_ReturnsMappedThreadObjects_Conf
 export type Tests_Lib_Utility_GetInactiveThreads_ReturnsMappedThreadObjects_Result = Shared_Thread[];
 
 /**
+ * Tests - Lib - Utility - Get Inactive Threads - Skips Issues Returned By Pull Request Search.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockSearchFn = Mock;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockOctokit_IssuesAndPullRequests = Mock;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockOctokit = {
+  rest: {
+    search: {
+      issuesAndPullRequests: Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_MockOctokit_IssuesAndPullRequests;
+    };
+  };
+};
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Config = z.infer<typeof configuration>;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsIssuesReturnedByPullRequestSearch_Result = Shared_Thread[];
+
+/**
+ * Tests - Lib - Utility - Get Inactive Threads - Skips Pull Requests Returned By Issue Search.
+ *
+ * @since 1.0.8
+ */
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockSearchFn = Mock;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockOctokit_IssuesAndPullRequests = Mock;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockOctokit = {
+  rest: {
+    search: {
+      issuesAndPullRequests: Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_MockOctokit_IssuesAndPullRequests;
+    };
+  };
+};
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Config = z.infer<typeof configuration>;
+
+export type Tests_Lib_Utility_GetInactiveThreads_SkipsPullRequestsReturnedByIssueSearch_Result = Shared_Thread[];
+
+/**
  * Tests - Lib - Utility - Get Inactive Threads - Stops At Page 10 Cap.
  *
  * @since 1.0.1

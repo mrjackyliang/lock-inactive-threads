@@ -35,6 +35,11 @@ import type {
   Tests_Lib_Action_LockInactiveThreads_RealModeCommentsAndLocksEachThread_MockAddThreadComment,
   Tests_Lib_Action_LockInactiveThreads_RealModeCommentsAndLocksEachThread_MockGetInactiveThreads,
   Tests_Lib_Action_LockInactiveThreads_RealModeCommentsAndLocksEachThread_MockLockThread,
+  Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_Config,
+  Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockAddThreadComment,
+  Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockGetInactiveThreads,
+  Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockLockThread,
+  Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockWarning,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_Config,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_MockAddThreadComment,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_MockGetInactiveThreads,
@@ -158,6 +163,55 @@ describe('lockInactiveThreads', () => {
     expect(mockLockThread).toHaveBeenNthCalledWith(2, 20, 'resolved', config);
 
     expect(mockLockThread).toHaveBeenNthCalledWith(3, 30, 'off-topic', config);
+
+    return;
+  });
+
+  it('skips duplicate thread numbers across searches', async () => {
+    const config: Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_Config = {
+      githubToken: 'ghp_test123',
+      issueComment: 'Locking issue.',
+      issueInactiveDays: 30,
+      issueLockReason: 'resolved' as const,
+      prComment: 'Locking PR.',
+      prInactiveDays: 30,
+      prLockReason: 'resolved' as const,
+      excludeLabels: [],
+      logOutput: true,
+      dryRun: false,
+    };
+    const mockGetInactiveThreads: Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockGetInactiveThreads = vi.mocked(getInactiveThreads);
+    const mockAddThreadComment: Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockAddThreadComment = vi.mocked(addThreadComment);
+    const mockLockThread: Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockLockThread = vi.mocked(lockThread);
+    const mockWarning: Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockWarning = vi.mocked(core.warning);
+
+    mockGetInactiveThreads.mockResolvedValueOnce([{
+      type: 'issue',
+      number: 153,
+      title: 'Node 24 Support?',
+      updatedAt: '2026-08-01T00:00:00Z',
+    }]).mockResolvedValueOnce([{
+      type: 'pull-request',
+      number: 153,
+      title: 'Node 24 Support?',
+      updatedAt: '2026-08-01T00:00:00Z',
+    }]);
+
+    await lockInactiveThreads(config);
+
+    expect(mockWarning).toHaveBeenCalledWith('Skipping duplicate pull-request #153 returned by inactive-thread searches.');
+
+    expect(mockAddThreadComment).toHaveBeenCalledTimes(1);
+
+    expect(mockAddThreadComment).toHaveBeenCalledWith(153, 'Locking issue.', config);
+
+    expect(mockLockThread).toHaveBeenCalledTimes(1);
+
+    expect(mockLockThread).toHaveBeenCalledWith(153, 'resolved', config);
+
+    expect(vi.mocked(core.setFailed)).not.toHaveBeenCalled();
+
+    expect(vi.mocked(core.setOutput)).toHaveBeenCalledWith('result', true);
 
     return;
   });

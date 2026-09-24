@@ -69,6 +69,8 @@ export type Lib_Utility_GetInactiveThreads_Page = number;
 
 export type Lib_Utility_GetInactiveThreads_Response = Awaited<ReturnType<Lib_Utility_GetInactiveThreads_Octokit['rest']['search']['issuesAndPullRequests']>>;
 
+export type Lib_Utility_GetInactiveThreads_ItemType = Shared_Thread_Type;
+
 /**
  * Lib - Utility - Lock Thread.
  *
