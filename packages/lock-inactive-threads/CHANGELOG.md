@@ -1,5 +1,11 @@
 # lock-inactive-threads
 
+## 1.0.9 - 2026-10-03
+
+### UPDATED
+- Updated Nova and its Docusaurus preset to 0.28.0, including the runtime-only Vitest resolution fix.
+- Assigned explicit child environments to development, production, build, and deployment script groups.
+
 ## 1.0.8 - 2026-09-23
 
 ### UPDATED
