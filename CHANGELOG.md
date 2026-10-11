@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.10 - 2026-10-11
+
+### UPDATED
+- Updated Nova to 0.29.0 across the project, action package, and docs, plus the Docusaurus preset to 0.29.0 in docs.
+- Completed JavaScript, TypeScript, browser, Node.js, and Docusaurus preset coverage, and consolidated custom Nova lint rules into the shared rule bundle while preserving workspace-specific overrides.
+- Declared the root workspace as ESM and expanded Vitest configuration and setup type-check coverage.
+- Recorded README badge and Node.js bug-report settings explicitly in Nova configuration.
+
 ## 1.0.9 - 2026-10-03
 
 ### UPDATED
