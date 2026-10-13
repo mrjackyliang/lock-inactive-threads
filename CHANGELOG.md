@@ -1,5 +1,15 @@
 # lock-inactive-threads
 
+## 1.0.11 - 2026-10-12
+
+### UPDATED
+- Updated Nova and Docusaurus Preset Nova to 0.30.1.
+- Adopted role-based TypeScript preset layers.
+- Standardized root-owned tests under the shared project layout.
+
+### FIXED
+- Regenerated the action publishing workflow so every published version receives its own releases-branch commit even when bundled runtime bytes are unchanged.
+
 ## 1.0.10 - 2026-10-11
 
 ### UPDATED
