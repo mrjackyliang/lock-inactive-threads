@@ -57,12 +57,12 @@ jobs:
 
       - name: "Check project"
         run: |
-          npx turbo run check --filter=// --filter=lock-inactive-threads --filter=lock-inactive-threads-docs --concurrency=2
+          npm run check
         working-directory: "${{ env.ROOT_DIR }}"
 
       - name: "Build project"
         run: |
-          npx turbo run build --filter=lock-inactive-threads --filter=lock-inactive-threads-docs --concurrency=2
+          npm run build:workspaces -- --workspace lock-inactive-threads --workspace lock-inactive-threads-docs
         working-directory: "${{ env.ROOT_DIR }}"
 
       - name: "Upload build artifacts (github-action/packages-lock-inactive-threads)"
@@ -84,7 +84,7 @@ jobs:
   publish-github-action-packages-lock-inactive-threads:
     needs: "build"
     runs-on: "ubuntu-latest"
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: "write"
       id-token: "write"
@@ -223,7 +223,7 @@ jobs:
   publish-github-pages-docusaurus-apps-docs:
     needs: "build"
     runs-on: "ubuntu-latest"
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: "read"
       pages: "write"

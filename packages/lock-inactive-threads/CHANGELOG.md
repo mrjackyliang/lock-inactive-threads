@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.12 - 2026-10-18
+
+### UPDATED
+- Updated Nova and Docusaurus Preset Nova to 0.33.0, including the consolidated Nova ESLint preset entry point.
+- Replaced Turborepo orchestration with Nova's workspace runner across local commands and the generated publishing workflow.
+- Migrated generated ignore settings to Nova's managed multi-file ignore configuration.
+- Moved the action's source-mode local runner under the structured development command group.
+
 ## 1.0.11 - 2026-10-12
 
 ### UPDATED

@@ -6,7 +6,7 @@
     },
     "description": {
       "short": "A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days",
-      "long": "GitHub Action that locks closed issues and pull requests once they have gone quiet for a configurable number of days. Issues and pull requests each get their own inactivity window, comment text, and GitHub lock reason. Excluded labels are skipped, and a dry run lists every thread it would lock \u2014 number, title, and last activity \u2014 before anything changes."
+      "long": "GitHub Action that locks closed issues and pull requests once they have gone quiet for a configurable number of days. Issues and pull requests each get their own inactivity window, comment text, and GitHub lock reason. Excluded labels are skipped, and a dry run lists every thread it would lock — number, title, and last activity — before anything changes."
     },
     "keywords": [
       "actions",
@@ -18,7 +18,8 @@
     "legalName": "Jacky Liang",
     "pronouns": "personal",
     "platforms": [
-      "nodejs"
+      "nodejs",
+      "web"
     ],
     "startingYear": 2026,
     "license": "MIT"
@@ -51,7 +52,7 @@
       "wiki": false,
       "projects": false,
       "discussions": false,
-      "sponsorships": false
+      "sponsorships": true
     },
     "policies": {
       "visibility": "public",
@@ -80,13 +81,25 @@
       "secretScanning": true,
       "pushProtection": true
     },
+    "rulesets": {
+      "defaultBranch": {
+        "enforcement": "active",
+        "blockDeletions": true,
+        "blockForcePushes": true,
+        "requireLinearHistory": false,
+        "requireSignedCommits": true,
+        "requirePullRequest": false,
+        "requiredStatusChecks": [],
+        "requireBranchesToBeUpToDate": false
+      }
+    },
     "actions": {
       "enabled": true,
       "allowedActions": "all",
       "shaPinningRequired": false,
       "defaultWorkflowPermissions": "read",
       "canApprovePullRequestReviews": false,
-      "artifactRetentionDays": 90
+      "artifactRetentionDays": 7
     },
     "labels": [
       {
@@ -148,14 +161,18 @@
       "triggers": [
         "issue-comment",
         "issues"
-      ]
+      ],
+      "runsOn": "ubuntu-latest",
+      "timeoutMinutes": 5
     },
     {
       "template": "lock-inactive-issues",
       "name": "lock-inactive",
       "triggers": [
         "schedule-weekly"
-      ]
+      ],
+      "runsOn": "ubuntu-latest",
+      "timeoutMinutes": 5
     },
     {
       "template": "publish",
@@ -163,6 +180,8 @@
       "triggers": [
         "release"
       ],
+      "runsOn": "ubuntu-latest",
+      "timeoutMinutes": 15,
       "build": [
         "./packages/lock-inactive-threads",
         "./apps/docs"
@@ -222,10 +241,15 @@
       "name": "lock-inactive-threads"
     }
   },
-  "gitignore": {
-    "projectExcludes": [
-      "graphify-out/"
-    ]
+  "ignoreFiles": {
+    "./.gitignore": {
+      "bundles": [
+        "nova"
+      ],
+      "patterns": [
+        "graphify-out/"
+      ]
+    }
   },
   "agents": [
     "claude-code",
@@ -249,7 +273,7 @@
         "enabled": true
       },
       "sync-rulesets": {
-        "enabled": false
+        "enabled": true
       },
       "sync-security": {
         "enabled": true
@@ -257,6 +281,31 @@
     },
     "license": {
       "update-copyright": {
+        "enabled": true
+      }
+    },
+    "miscellaneous": {
+      "fix-markdown-tables": {
+        "enabled": true
+      },
+      "remove-operating-system-files": {
+        "enabled": true,
+        "settings": {
+          "linux": {},
+          "macos": {
+            "appleDouble": true,
+            "desktopServicesStore": true
+          },
+          "windows": {
+            "enhancedThumbnailDatabase": true,
+            "enhancedVistaThumbnailDatabase": true,
+            "thumbnailDatabase": true
+          }
+        }
+      }
+    },
+    "nova-config": {
+      "normalize-order": {
         "enabled": true
       }
     },
@@ -497,6 +546,21 @@
   },
   "settings": {
     "lockStepVersioning": true,
+    "runWorkspaces": {
+      "cache": {
+        "directory": "./node_modules/.cache/nova/run-workspaces",
+        "enabled": true,
+        "scripts": [
+          "build",
+          "check"
+        ]
+      },
+      "concurrency": {
+        "build": 2,
+        "check": 2,
+        "deploy": 2
+      }
+    },
     "versionStrategy": "semver"
   }
 }

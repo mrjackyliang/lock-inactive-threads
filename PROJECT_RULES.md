@@ -7,7 +7,7 @@
 - **Project name:** Lock Inactive Threads (`lock-inactive-threads`)
 - **Description:** A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days.
 - **Primary language:** TypeScript
-- **Framework / runtime:** GitHub Actions (Node.js 20 runtime per `action.yml`); developed against Node.js 22/24
+- **Framework / runtime:** GitHub Actions using the runtime declared in `action.yml`; developed with the Node.js versions declared by the root manifest
 
 ### Repository URL
 
@@ -17,12 +17,16 @@
 
 ```
 lock-inactive-threads/
-|-- build/               - Compiled action bundle (ncc output; the artifact action.yml executes)
+|-- .github/             - Issue templates, funding metadata, and generated workflows
+|-- apps/
+|   `-- docs/            - Docusaurus documentation workspace
 |-- conventions/         - Generator-managed coding convention files (do not edit locally)
-|-- src/                 - Application source code
-|   |-- lib/             - Action logic, Zod schema, GitHub API utilities
-|   |-- tests/           - Unit tests, mirrors src/ structure
-|   `-- types/           - TypeScript type definitions (.d.ts)
+|-- packages/
+|   `-- lock-inactive-threads/
+|       |-- build/       - Compiled action bundle (ncc output; the artifact action.yml executes)
+|       `-- src/         - Action source, tests, and type declarations
+|-- scripts/             - Root maintenance and Nova-linking scripts
+|-- tests/               - Root project-contract tests
 |-- .editorconfig        - Editor formatting rules
 |-- .env.sample          - Template for local-run inputs (copy to .env)
 |-- .gitignore           - Git ignore patterns
@@ -30,20 +34,20 @@ lock-inactive-threads/
 |-- AGENTS.md            - Generator-managed agent entry point (do not edit locally)
 |-- CHANGELOG.md         - Release history
 |-- CLAUDE.md            - Generator-managed agent entry point (do not edit locally)
-|-- eslint.config.js     - ESLint flat config
+|-- eslint.config.mts    - Root ESLint flat config
 |-- LICENSE              - MIT license
 |-- nova.config.json     - Nova project configuration (identity, workspaces, agents)
 |-- package.json         - Node.js manifest and scripts
 |-- PROJECT_RULES.md     - This file
 |-- README.md            - Usage, inputs, outputs
-|-- tsconfig.json        - TypeScript compiler configuration
+|-- tsconfig.*.json      - Root configuration, scripts, and test TypeScript projects
 `-- VISION.md            - Purpose, marketing copy, and glossary
 ```
 
 ## Source Structure
 
 ```
-src/
+packages/lock-inactive-threads/src/
 |-- index.ts                  - Action entry point; calls runAction
 |-- run.ts                    - Orchestrator: builds config and context, prints log groups, error boundary (core.setFailed)
 |-- lib/
@@ -61,46 +65,48 @@ src/
 
 ## Key Files
 
-| File                   | Purpose                                    | When to modify                                                           |
-|------------------------|--------------------------------------------|--------------------------------------------------------------------------|
-| `action.yml`           | Action metadata (inputs, outputs, runtime) | Adding or changing inputs/outputs, branding, or the Node runtime version |
-| `src/lib/action.ts`    | Core lock orchestration                    | Changing the lock flow, dry-run behavior, or logging                     |
-| `src/lib/utility.ts`   | GitHub API helpers and input reading       | Changing the search query, pagination, or API calls                      |
-| `src/lib/schema.ts`    | Zod input validation schema                | Changing input shapes, defaults, or allowed values                       |
-| `src/types/index.d.ts` | Function type aliases                      | Any function signature change in `src/`                                  |
-| `.env.sample`          | Local-run input template                   | Whenever an input is added, renamed, or its default changes              |
-| `README.md`            | Usage and inputs/outputs reference         | Whenever an input, output, or default changes                            |
-| `package.json`         | Manifest and build scripts                 | Adding dependencies, changing scripts, bumping version                   |
-| `tsconfig.json`        | TS config (incl. `@/` path alias)          | Changing compiler options or path aliases                                |
-| `CHANGELOG.md`         | Release notes                              | Every user-facing change                                                 |
+| File                                                  | Purpose                                    | When to modify                                                     |
+|-------------------------------------------------------|--------------------------------------------|--------------------------------------------------------------------|
+| `action.yml`                                          | Action metadata (inputs, outputs, runtime) | Adding or changing inputs/outputs, branding, or the runner runtime |
+| `packages/lock-inactive-threads/src/lib/action.ts`    | Core lock orchestration                    | Changing the lock flow, dry-run behavior, or logging               |
+| `packages/lock-inactive-threads/src/lib/utility.ts`   | GitHub API helpers and input reading       | Changing the search query, pagination, or API calls                |
+| `packages/lock-inactive-threads/src/lib/schema.ts`    | Zod input validation schema                | Changing input shapes, defaults, or allowed values                 |
+| `packages/lock-inactive-threads/src/types/index.d.ts` | Function type aliases                      | Any exported function signature change                             |
+| `packages/lock-inactive-threads/.env.sample`          | Local-run input template                   | Whenever an input is added, renamed, or its default changes        |
+| `packages/lock-inactive-threads/README.md`            | Usage and inputs/outputs reference         | Whenever an input, output, or default changes                      |
+| `packages/lock-inactive-threads/package.json`         | Deliverable manifest and build scripts     | Adding dependencies, changing scripts, or releasing                |
+| `packages/lock-inactive-threads/CHANGELOG.md`         | Release history                            | Every user-facing change                                           |
+| `apps/docs/docusaurus.config.ts`                      | Documentation site configuration           | Changing docs metadata, navigation, or deployment                  |
 
 ## Build and Tooling
 
 ### Prerequisites
 
-| Tool    | Version              | Purpose                                                 |
-|---------|----------------------|---------------------------------------------------------|
-| Node.js | 22.x or 24.x         | Local development runtime (`engines` in `package.json`) |
-| npm     | Bundled with Node.js | Package manager, runs the build scripts                 |
-
-On GitHub, the action executes on the `node20` runtime declared in `action.yml`; no consumer-side install is needed.
+| Tool           | Version source                  | Purpose                                            |
+|----------------|---------------------------------|----------------------------------------------------|
+| Node.js        | Root `package.json` `engines`   | Local development, builds, and local action runs   |
+| npm            | Root `package.json` package pin | Workspace-aware package manager                    |
+| Action runtime | Root `action.yml`               | Runtime used by consuming GitHub Actions workflows |
 
 ### Commands
 
-| Command               | What it does                                                                          |
-|-----------------------|---------------------------------------------------------------------------------------|
-| `npm install`         | Install all dependencies (`postinstall` runs the full build)                          |
-| `npm start`           | Run the action locally via `@github/local-action`, reading inputs from `.env`         |
-| `npm run build`       | Full build: runs `build:reset`, `build:lint`, and `build:ncc` sequentially            |
-| `npm run build:reset` | Delete the `build/` directory                                                         |
-| `npm run build:lint`  | Run ESLint across `src/`                                                              |
-| `npm run build:ncc`   | Bundle `src/index.ts` into `build/index.js` with `@vercel/ncc` (source map, licenses) |
+| Command                                         | What it does                                                                                      |
+|-------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `npm install`                                   | Install every workspace; package postinstall builds the action bundle                             |
+| `npm run dev`                                   | Run development scripts across workspaces through Nova                                            |
+| `npm run check`                                 | Run workspace checks, then root lint, type checks, and Vitest suites                              |
+| `npm run build`                                 | Build the action bundle and documentation site through Nova                                       |
+| `npm run deploy`                                | Check and build the repository before generated publishing workflows run                          |
+| `npm run clean`                                 | Remove workspace build output                                                                     |
+| `npm run changelog`                             | Record, preview, or cut releases through Nova                                                     |
+| `npm run recipes`                               | Apply the recipes configured in `nova.config.json`                                                |
+| `npm run dev --workspace lock-inactive-threads` | Run the action's TypeScript source locally via `@github/local-action`, reading inputs from `.env` |
 
-There is no `npm test` script. Tests exist in `src/tests/` (written against `node:test` and `node:assert/strict`), but neither `node --test` nor `vitest` currently resolves the `@/` path alias, so a runner still needs to be wired up.
+Tests run through Vitest as part of each package and root `check` pipeline.
 
 ### Environment Variables
 
-Environment variables are only used for local runs (`npm start`). Copy `.env.sample` to `.env` and fill it in; on GitHub, the workflow's `with:` inputs are mapped to these variables automatically.
+Environment variables are only used for local action runs. Copy `packages/lock-inactive-threads/.env.sample` to `.env` in that workspace and fill it in; on GitHub, workflow `with:` inputs are mapped automatically.
 
 | Variable                                               | Required | Purpose                                                        |
 |--------------------------------------------------------|----------|----------------------------------------------------------------|
@@ -115,7 +121,7 @@ Environment variables are only used for local runs (`npm start`). Copy `.env.sam
 
 ## Workspace Rules
 
-Nova (`nova.config.json`) defines a single workspace at `./` with role `package` and policy `distributable`; the repository root is the deliverable.
+Nova defines a freezable root project, a freezable documentation workspace, and the distributable action package in `nova.config.json`.
 
 ### Naming Conventions
 
@@ -152,7 +158,7 @@ Nova (`nova.config.json`) defines a single workspace at `./` with role `package`
 Linear GitHub Action pipeline with a single entry point and a single error boundary:
 
 ```
-GitHub Actions runner (node20) / local-action (npm start)
+GitHub Actions runner / local-action (`npm run dev --workspace lock-inactive-threads`)
   |
   v
 src/index.ts        - initialize, calls runAction
@@ -188,35 +194,35 @@ src/lib/utility.ts  - Octokit calls: search, createComment, lock
 
 ### Framework
 
-- **Framework:** None
-- **Source:** `README.md` (usage example, inputs table, default comments, outputs)
+- **Framework:** Docusaurus with the Nova preset
+- **Source:** `apps/docs/`
 
 ### Site Structure
 
-No documentation site. All user-facing documentation lives in `README.md`, with release history in `CHANGELOG.md`.
+The documentation site lives in `apps/docs/`, while package usage remains summarized in `packages/lock-inactive-threads/README.md` and release history lives beside the package.
 
 ### Commands
 
-No documentation site commands.
+Use the root `dev`, `check`, `build`, and `deploy` commands so Nova orchestrates the docs and action workspaces together.
 
 ## Publishing and Deployment
 
 ### Release Process
 
-The action is distributed as this repository itself; consumers reference it in workflows as `mrjackyliang/lock-inactive-threads@v1`. What ships is whatever `build/index.js` contains at the tag.
+The action is distributed as this repository itself; consumers reference its maintained release tag, and `action.yml` executes the committed package bundle.
 
 1. All changes committed, working tree clean.
-2. `CHANGELOG.md` updated and the version bumped in `package.json`.
-3. Run `npm run build` so `build/` matches `src/` (reset, lint, bundle), then commit the rebuilt `build/` output.
-4. Tag the release (e.g. `v1.0.0`) and update the `v1` major tag that consumers track.
-5. Push the commit and tags.
+2. Preview and cut the package release with `npm run changelog -- --release --dry-run`, then `npm run changelog -- --release`.
+3. Run `npm run check` and `npm run build`; confirm the committed action bundle matches its source.
+4. Commit the release result and tag it with the released package version.
+5. Push the commit and tag, then publish the GitHub Release so the generated workflow validates and deploys the repository.
 
 ### CI/CD Workflows
 
-None. The repository has no `.github/` directory; there are no workflows of its own. The action runs inside the consuming repositories' workflows.
+Nova-generated workflows under `.github/workflows/` validate and publish the project and provide the repository's sponsor-gating and inactive-thread automation.
 
 ### Environments
 
-| Environment            | URL / Identifier                        | Purpose                                          |
-|------------------------|-----------------------------------------|--------------------------------------------------|
-| GitHub repository tags | `mrjackyliang/lock-inactive-threads@v1` | Distribution channel referenced in `uses:` steps |
+| Environment            | URL / Identifier                                   | Purpose                                          |
+|------------------------|----------------------------------------------------|--------------------------------------------------|
+| GitHub repository tags | `mrjackyliang/lock-inactive-threads@<release-tag>` | Distribution channel referenced in `uses:` steps |
