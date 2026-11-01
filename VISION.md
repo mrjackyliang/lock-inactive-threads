@@ -15,6 +15,29 @@ Closed issues and pull requests on GitHub remain open to new comments unless the
 
 Lock Inactive Threads is a GitHub Action that locks issues and pull requests after they have been inactive for a configurable number of days. Issues and pull requests are configured independently (closing comment, inactivity window, lock reason), labels can exempt threads from locking, and a dry-run mode previews every change before it happens. It drops into any repository as a single scheduled workflow step.
 
+## Product Direction
+
+No additional product-direction constraints are currently documented beyond the project purpose and existing capabilities.
+
+## Product Design
+
+The current capabilities and intended experience are described by the value proposition and key features; domain terminology is defined in the glossary.
+
+## Positioning
+
+### Differentiators
+
+| This project                                                    | Alternatives                                              |
+|-----------------------------------------------------------------|-----------------------------------------------------------|
+| One scheduled workflow step locks both issues and pull requests | Locking threads one by one from the GitHub UI             |
+| Separate comment, window, and lock reason per thread type       | A single policy applied to issues and pull requests alike |
+| Dry-run preview shows every thread before anything is locked    | Changes are discovered only after they have been made     |
+| Zod-validated inputs that fail the run fast with a clear error  | Input typos silently producing unintended behavior        |
+
+## Risks and Future
+
+No additional risks, open questions, roadmap commitments, or success criteria are currently documented.
+
 ## Marketing Copy
 
 ### Tagline
@@ -36,15 +59,6 @@ Lock Inactive Threads is a GitHub Action designed to lock issues and pull reques
 - **Search-based scanning with pagination** - Uses the GitHub search API to target only closed, unlocked threads past the inactivity window, paginating up to 1,000 threads per type per run.
 - **Validated inputs** - Every input passes through a Zod schema that coerces numbers, applies defaults, and fails the run with a clear error on invalid values.
 
-### Differentiators
-
-| This project                                                    | Alternatives                                              |
-|-----------------------------------------------------------------|-----------------------------------------------------------|
-| One scheduled workflow step locks both issues and pull requests | Locking threads one by one from the GitHub UI             |
-| Separate comment, window, and lock reason per thread type       | A single policy applied to issues and pull requests alike |
-| Dry-run preview shows every thread before anything is locked    | Changes are discovered only after they have been made     |
-| Zod-validated inputs that fail the run fast with a clear error  | Input typos silently producing unintended behavior        |
-
 ## Glossary
 
 | Term              | Definition                                                                                                                                                                   |
@@ -59,3 +73,7 @@ Lock Inactive Threads is a GitHub Action designed to lock issues and pull reques
 | Action input      | A `with:` value from the consuming workflow, surfaced to the action as an `INPUT_*` environment variable and read via `core.getInput`.                                       |
 | Configuration     | The Zod-parsed object produced from the raw inputs: coerced numbers, boolean flags, a trimmed label array, and defaulted comments.                                           |
 | `result` output   | The action's single output, set to `true` when the run (or dry run) completes, or `false` when one or more threads fail to lock or an unexpected error occurs.               |
+
+## Additional Vision Notes
+
+No additional vision notes are currently documented.

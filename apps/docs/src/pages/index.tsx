@@ -1,4 +1,5 @@
 import {
+  BlogPreview,
   Canvas,
   Features,
   Stats,
@@ -17,8 +18,8 @@ import type { Pages_Index_Home_Returns } from '../types/pages/index.d.ts';
 /**
  * Pages - Home.
  *
- * Landing page that composes the hero header, feature grid, and stats
- * using theme components from the Nova preset.
+ * Landing page that composes the hero header, feature grid, stats, and
+ * blog preview using theme components from the Nova preset.
  *
  * @constructor
  *
@@ -247,6 +248,20 @@ function Home(): Pages_Index_Home_Returns {
               color: 'accent',
             },
           ]}
+        />
+        <BlogPreview
+          heading={translate({
+            id: 'home.blogPreview.heading',
+            message: 'From the Blog',
+            description: 'Front page Blog Preview section heading',
+          })}
+          description={translate({
+            id: 'home.blogPreview.description',
+            message: 'Release notes, workflow guides, and notes on repository hygiene.',
+            description: 'Front page Blog Preview section description',
+          })}
+          auto={true}
+          limit={3}
         />
       </main>
     </Layout>

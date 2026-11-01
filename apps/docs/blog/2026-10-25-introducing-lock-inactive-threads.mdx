@@ -1,0 +1,77 @@
+---
+title: "Introducing Lock Inactive Threads: Locking on Your Schedule"
+description: Lock Inactive Threads is a GitHub Action that comments on and locks closed issues and pull requests once they go quiet, with a dry run to preview each lock.
+slug: introducing-lock-inactive-threads
+authors:
+  - mrjackyliang
+keywords:
+  - lock inactive threads
+  - github action
+  - stale issues
+  - pull requests
+  - dry run
+  - repository hygiene
+tags:
+  - announcement
+  - github actions
+  - automation
+---
+
+Closed issues and pull requests on GitHub stay open to new comments unless they're locked. Over time, resolved threads collect "me too" posts, comments on long-fixed bugs, and new questions where you no longer look, and each one notifies everyone subscribed.
+
+Lock Inactive Threads is my answer: a GitHub Action that comments on and locks closed issues and pull requests once they've gone quiet for the number of days you set.
+
+{/* truncate */}
+
+## Why I Built It
+
+I wanted closed threads to lock themselves after a quiet period, so discussion stays on current threads instead of resurfacing on resolved ones. Locking them by hand doesn't scale past a handful of repositories, and stale conversations pull attention away from new, actionable reports.
+
+I also wanted separate rules for issues and pull requests, a preview before anything changed, and one scheduled workflow I could reuse across repositories instead of a script for each.
+
+## What It Does
+
+Each run finds every closed, unlocked thread past its inactivity window, posts a closing comment, and locks it with the reason you choose. On top of that, it:
+
+- **Treats issues and pull requests separately** — Each type gets its own closing comment, inactivity window, and lock reason.
+- **Explains every lock** — It comments before locking, with the built-in default text or your own.
+- **Uses GitHub's native lock reasons** — Threads are locked as `off-topic`, `resolved`, `spam`, or `too heated`, with `resolved` as the default.
+- **Skips labeled threads** — Threads carrying a label from the comma-delimited `EXCLUDE_LABELS` list stay out of the sweep.
+- **Previews before it changes anything** — With `DRY_RUN` on, it logs each thread it would lock, with its title and last-updated date, and changes nothing.
+- **Fails fast on bad input** — A misconfigured value fails the run with a clear error instead of producing unexpected results.
+
+Each run handles up to 1,000 threads per type, and the `result` output lets later steps react when a thread fails to lock.
+
+## Add It to a Workflow
+
+`GITHUB_TOKEN` is the only required input, and the workflow needs write access to issues and pull requests. Here's a weekly run that starts as a dry run:
+
+```yaml title=".github/workflows/lock-inactive-threads.yml"
+name: "Lock Inactive Threads"
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+
+permissions:
+  issues: "write"
+  pull-requests: "write"
+
+jobs:
+  lock-inactive-threads:
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 5
+    steps:
+      - uses: "mrjackyliang/lock-inactive-threads@v1"
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          DRY_RUN: "true"
+```
+
+This runs every Sunday at midnight UTC. It's recommended to keep `DRY_RUN` on for your first few runs, then set it to `false` once the preview looks correct.
+
+## Where It Stands Today
+
+Version 1.0.0 shipped in March 2026, and Lock Inactive Threads is at 1.0.12 today. Since then, one failed thread no longer stops the whole run, search results are deduplicated so no thread is processed twice, and the action moved to GitHub's Node 24 runtime.
+
+Head to [Usage](/docs/getting-started/usage/) for the complete workflow, including daily schedules and manual dry runs from the Actions tab.

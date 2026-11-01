@@ -17,7 +17,7 @@ const identity = new NovaIdentity().forDocs();
 const config: DocusaurusNovaConfig = {
   // Site Metadata.
   title: identity['title'] ?? '',
-  titleDelimiter: ' - ',
+  titleDelimiter: '-',
   tagline: identity['tagline'],
   favicon: './favicon.ico',
 
@@ -153,8 +153,8 @@ const config: DocusaurusNovaConfig = {
             dark: '#2E4A42',
           },
           warning: {
-            light: '#D4940A',
-            dark: '#F0B13A',
+            light: '#B7791F',
+            dark: '#E3A84A',
           },
           danger: {
             light: '#C0392B',
@@ -187,13 +187,30 @@ const config: DocusaurusNovaConfig = {
             },
           },
         },
-        blog: false,
+        blog: {
+          showReadingTime: true,
+          blogTitle: 'Blog',
+          blogDescription: 'Release notes, workflow guides, and notes on keeping resolved conversations from collecting stale replies.',
+          postsPerPage: 10,
+          blogSidebarTitle: 'Recent Posts',
+          blogSidebarCount: 15,
+          feedOptions: {
+            type: [
+              'rss',
+              'atom',
+            ],
+            copyright: identity['copyright'],
+            limit: 20,
+            title: 'Lock Inactive Threads Blog',
+            description: 'Release notes, workflow guides, and notes on keeping resolved conversations from collecting stale replies.',
+          },
+        },
         pages: undefined,
         sitemap: {
           lastmod: 'date',
           changefreq: 'weekly',
           priority: 0.5,
-          ignorePatterns: ['/docs/tags/**'],
+          ignorePatterns: ['**/docs/tags/**'],
           filename: 'sitemap.xml',
         },
       },
@@ -206,7 +223,7 @@ const config: DocusaurusNovaConfig = {
       // Search.
       search: {
         indexDocs: true,
-        indexBlog: false,
+        indexBlog: true,
         indexPages: true,
         docsRouteBasePath: 'docs',
         hashed: true,
@@ -233,7 +250,7 @@ const config: DocusaurusNovaConfig = {
       logo: {
         alt: 'Lock Inactive Threads',
         src: {
-          light: `${identity['baseUrl'] ?? '/'}images/logo.svg`,
+          light: `${identity['baseUrl'] ?? '/'}images/navbar.svg`,
           dark: undefined,
         },
         href: '/',
@@ -283,6 +300,13 @@ const config: DocusaurusNovaConfig = {
           icon: 'lucide:play',
         },
         {
+          label: 'Blog',
+          position: 'left',
+          type: undefined,
+          to: '/blog/',
+          icon: 'lucide:pen-line',
+        },
+        {
           label: 'Sponsor',
           position: 'right',
           type: undefined,
@@ -298,6 +322,26 @@ const config: DocusaurusNovaConfig = {
       sidebar: {
         hideable: false,
         autoCollapseCategories: false,
+      },
+    },
+
+    // Blog.
+    blog: {
+      sidebar: {
+        groupByYear: true,
+      },
+      layout: {
+        heading: 'Blog',
+        description: 'Release notes and workflow guides',
+      },
+      share: {
+        platforms: [
+          'linkedin',
+          'reddit',
+          'facebook',
+          'x',
+          'copy',
+        ],
       },
     },
 
@@ -357,6 +401,10 @@ const config: DocusaurusNovaConfig = {
           },
         ],
         project: [
+          {
+            label: 'Blog',
+            href: '/blog/',
+          },
           {
             label: 'GitHub',
             href: 'https://github.com/mrjackyliang/lock-inactive-threads',
