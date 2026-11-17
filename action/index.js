@@ -38856,6 +38856,15 @@ async function getInactiveThreads(config, type) {
     }
     return threads;
 }
+async function isThreadLocked(issueNumber, config) {
+    const octokit = github.getOctokit(config['githubToken']);
+    const response = await octokit.rest.issues.get({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: issueNumber,
+    });
+    return response.data.locked;
+}
 async function lockThread(issueNumber, lockReason, config) {
     const octokit = github.getOctokit(config['githubToken']);
     await octokit.rest.issues.lock({
@@ -38897,8 +38906,16 @@ async function lockInactiveThreads(config) {
         return;
     }
     let failureCount = 0;
+    let skippedCount = 0;
     for (const issue of inactiveIssues) {
         try {
+            if (await isThreadLocked(issue['number'], config) === true) {
+                skippedCount += 1;
+                if (config['logOutput'] === true) {
+                    lib_core.info(`Skipping issue #${issue['number']}: already locked`);
+                }
+                continue;
+            }
             if (config['logOutput'] === true) {
                 lib_core.info(`Locking issue #${issue['number']}: ${issue['title']}`);
             }
@@ -38917,6 +38934,13 @@ async function lockInactiveThreads(config) {
     }
     for (const pr of inactivePrs) {
         try {
+            if (await isThreadLocked(pr['number'], config) === true) {
+                skippedCount += 1;
+                if (config['logOutput'] === true) {
+                    lib_core.info(`Skipping pull request #${pr['number']}: already locked`);
+                }
+                continue;
+            }
             if (config['logOutput'] === true) {
                 lib_core.info(`Locking pull request #${pr['number']}: ${pr['title']}`);
             }
@@ -38933,7 +38957,7 @@ async function lockInactiveThreads(config) {
             }
         }
     }
-    const totalCount = inactiveIssues.length + inactivePrs.length;
+    const totalCount = inactiveIssues.length + inactivePrs.length - skippedCount;
     const successCount = totalCount - failureCount;
     if (failureCount > 0) {
         lib_core.info(`Locked ${successCount} of ${totalCount} thread(s) (${failureCount} failed)`);

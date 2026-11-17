@@ -1,15 +1,23 @@
 # lock-inactive-threads
 
+## 1.0.14 - 2026-11-17
+
+### UPDATED
+- Nova is now 0.44.0.
+
+### FIXED
+- Threads that GitHub search still lists as unlocked after they were locked are now skipped instead of failing the run.
+
 ## 1.0.13 - 2026-11-01
 
 ### UPDATED
 - Hardened action publishing with artifact boundary checks, sensitive-file rejection, hidden-file preservation, and fail-fast uploads.
-- Updated the action toolchain to Nova 0.38.0, added Node.js 26 compatibility, and aligned package orchestration and TypeScript roles with current Nova defaults.
+- The action toolchain moves to Nova 0.38.0, Node.js 26 is supported, and package orchestration and TypeScript roles are aligned with current Nova defaults.
 
 ## 1.0.12 - 2026-10-18
 
 ### UPDATED
-- Updated Nova and Docusaurus Preset Nova to 0.33.0, including the consolidated Nova ESLint preset entry point.
+- Nova and Docusaurus Preset Nova are now 0.33.0, including the consolidated Nova ESLint preset entry point.
 - Replaced Turborepo orchestration with Nova's workspace runner across local commands and the generated publishing workflow.
 - Migrated generated ignore settings to Nova's managed multi-file ignore configuration.
 - Moved the action's source-mode local runner under the structured development command group.
@@ -17,7 +25,7 @@
 ## 1.0.11 - 2026-10-12
 
 ### UPDATED
-- Updated Nova and Docusaurus Preset Nova to 0.30.1.
+- Nova and Docusaurus Preset Nova are now 0.30.1.
 - Adopted role-based TypeScript preset layers.
 - Standardized root-owned tests under the shared project layout.
 
@@ -27,7 +35,7 @@
 ## 1.0.10 - 2026-10-11
 
 ### UPDATED
-- Updated Nova to 0.29.0 across the project, action package, and docs, plus the Docusaurus preset to 0.29.0 in docs.
+- Nova is now 0.29.0 across the project, action package, and docs, plus the Docusaurus preset at 0.29.0 in docs.
 - Completed JavaScript, TypeScript, browser, Node.js, and Docusaurus preset coverage, and consolidated custom Nova lint rules into the shared rule bundle while preserving workspace-specific overrides.
 - Declared the root workspace as ESM and expanded Vitest configuration and setup type-check coverage.
 - Recorded README badge and Node.js bug-report settings explicitly in Nova configuration.
@@ -35,13 +43,13 @@
 ## 1.0.9 - 2026-10-03
 
 ### UPDATED
-- Updated Nova and its Docusaurus preset to 0.28.0, including the runtime-only Vitest resolution fix.
+- Nova and its Docusaurus preset are now 0.28.0, including the runtime-only Vitest resolution fix.
 - Assigned explicit child environments to development, production, build, and deployment script groups.
 
 ## 1.0.8 - 2026-09-23
 
 ### UPDATED
-- Updated Nova and its Docusaurus preset to 0.27.3.
+- Nova and its Docusaurus preset are now 0.27.3.
 
 ### FIXED
 - Validated GitHub Search result types and deduplicated thread numbers before mutation, preventing mismatched issue and pull request results from being processed twice.
@@ -49,7 +57,7 @@
 ## 1.0.7 - 2026-09-18
 
 ### UPDATED
-- Updated Nova and its Docusaurus preset to 0.27.2.
+- Nova and its Docusaurus preset are now 0.27.2.
 
 ### FIXED
 - Removed a redundant CommonJS export condition from the ESM package manifest so its entry point stays unambiguous.
@@ -57,12 +65,12 @@
 ## 1.0.6 - 2026-09-16
 
 ### UPDATED
-- Updated Nova and its Docusaurus preset to 0.27.1, and regenerated the publish workflow to use Node 24-ready build attestation and Corepack-managed npm.
+- Nova and its Docusaurus preset are now 0.27.1, and the publish workflow is regenerated to use Node 24-ready build attestation and Corepack-managed npm.
 
 ## 1.0.5 - 2026-09-16
 
 ### UPDATED
-- Updated Nova and its Docusaurus preset to 0.27.0, TypeScript to 6.0.3, Vitest to 4.1.11, Zod to 4.4.3, and related dependencies; adapted inactivity-day coercion to Zod 4.
+- Nova and its Docusaurus preset move to 0.27.0, TypeScript to 6.0.3, Vitest to 4.1.11, Zod to 4.4.3, and related dependencies; adapted inactivity-day coercion to Zod 4.
 - Disabled Turbo caching for build and check tasks so repository commands no longer accumulate persistent Turbo cache artifacts.
 - Renamed the action and docs Vitest configuration files from .ts to .mts, updated their references, and retained the docs @site alias.
 - Added daily and weekly workflow tabs to the usage guide and aligned the repository's generated inactivity maintenance workflow with the weekly schedule.
@@ -77,24 +85,24 @@
 ## 1.0.3 - 2026-08-20
 
 ### UPDATED
-- Updated the project homepage URL to point to the documentation site and added a logo URL for README branding.
+- The project homepage URL points to the documentation site, and a logo URL is included for README branding.
 
 ## 1.0.2 - 2026-08-20
 
 ### UPDATED
-- Updated @cbnventures/nova to 0.25.2 and @cbnventures/docusaurus-preset-nova to 0.25.2.
+- The @cbnventures/nova package is now 0.25.2 and @cbnventures/docusaurus-preset-nova is now 0.25.2.
 - Regenerated CI workflows with the updated Nova GitHub Action publish template.
 - Tightened the root webpack version override to >=5.95.0 <5.106.0 to prevent the Docusaurus 3.10 Progress Plugin incompatibility with webpack 5.106.0 and later.
 
 ### REMOVED
-- Removed stale npm-run-all and rimraf dev dependencies that were replaced by Nova internal tooling during the monorepo migration.
-- Removed stale root CHANGELOG.md leftover from the pre-monorepo layout and merged its v1.0.0 entry into the package-level changelog.
+- Stale npm-run-all and rimraf dev dependencies that were replaced by Nova internal tooling during the monorepo migration are gone.
+- The stale root CHANGELOG.md leftover from the pre-monorepo layout is gone, and its v1.0.0 entry is merged into the package-level changelog.
 
 ## 1.0.1 - 2026-08-20
 
 ### UPDATED
 - Restructured the repository into a Turborepo and npm-workspaces monorepo governed by a new nova.config.json, moving the action into packages/lock-inactive-threads with its own package.json and TypeScript project references, migrating from .eslintrc.json to flat ESLint config, and regenerating the root README and LICENSE.
-- Updated @cbnventures/nova to 0.25.1 and @cbnventures/docusaurus-preset-nova to 0.25.1.
+- The @cbnventures/nova package is now 0.25.1 and @cbnventures/docusaurus-preset-nova is now 0.25.1.
 - Added Vitest project config for the relocated package, registered Nova dotenv and type-declaration self-check test suites, and typed the existing schema and utility test results with named .d.ts aliases.
 - Rewrote the action source and type declarations to follow Nova TypeScript conventions: bracket-notation property access, explicit variable types backed by per-symbol named .d.ts aliases, relative imports instead of @/ path aliases, explicit return statements, and hierarchy-based JSDoc headers. The locking pipeline now catches per-thread errors individually so a single failure no longer aborts the entire run; threads that fail to comment or lock are counted and reported via core.warning, and core.setFailed fires with the failure tally when any thread fails.
 - Adopted the Nova GitHub generator for CI workflows (scheduled inactive-thread locking, sponsor-gated issue checks, and release publishing for both the action and docs site), issue templates, and funding configuration.
@@ -102,11 +110,11 @@
 
 ### FIXED
 - The excludeLabels parser now filters empty strings that resulted from consecutive commas in the EXCLUDE_LABELS input, preventing blank label exclusions from being interpolated into the GitHub search query.
-- Fixed a typo in the action.yml EXCLUDE_LABELS description: "comma de-limited" corrected to "comma-delimited".
+- The action.yml EXCLUDE_LABELS description reads "comma-delimited" instead of the typo "comma de-limited".
 
 ### ADDED
-- Added Nova AI agent convention scaffolding (AGENTS.md, CLAUDE.md, PROJECT_RULES.md, VISION.md) along with per-language coding convention references covering TypeScript, Python, Swift, Kotlin, Java, C#, PHP, Shell, Docker, CSS, and documentation.
-- Added a new Docusaurus documentation site (apps/docs) with a landing page, overview, usage guide, inputs/outputs reference, and terminology glossary, plus content self-check tests for frontmatter, links, markdown tables, and terminology; the README now links to it as the primary documentation source.
+- Nova AI agent convention scaffolding (AGENTS.md, CLAUDE.md, PROJECT_RULES.md, VISION.md) along with per-language coding convention references covering TypeScript, Python, Swift, Kotlin, Java, C#, PHP, Shell, Docker, CSS, and documentation.
+- A new Docusaurus documentation site (apps/docs) with a landing page, overview, usage guide, inputs/outputs reference, and terminology glossary, plus content self-check tests for frontmatter, links, markdown tables, and terminology; the README now links to it as the primary documentation source.
 - Adopted Nova must-haves generators for .env.sample (root and package-scoped), .editorconfig, and .gitignore, replacing hand-maintained versions with regeneratable equivalents.
 
 ## 1.0.0 - 2026-03-10
