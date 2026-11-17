@@ -1,0 +1,53 @@
+---
+title: "Lock Inactive Threads 1.0 Sweeps 1,000 Threads per Type"
+description: Version 1.0.0 comments on and locks quiet, closed issues and pull requests on a schedule, up to 1,000 of each per run, with a dry run first.
+slug: lock-inactive-threads-1-0
+authors:
+  - mrjackyliang
+keywords:
+  - lock inactive threads
+  - github action
+  - first release
+  - stale issues
+  - dry run
+tags:
+  - release
+  - github actions
+  - automation
+---
+
+Lock Inactive Threads 1.0.0 shipped on March 10, 2026. The GitHub Action finds closed issues and pull requests that have gone quiet, posts a closing comment, and locks them, handling up to 1,000 threads of each type in a single run.
+
+{/* truncate */}
+
+## Why It Matters
+
+Resolved threads keep collecting comments long after the work is done, and every comment notifies everyone subscribed. Locking them by hand works for a few threads, not for a repository with years of history.
+
+With 1.0.0, one scheduled workflow clears the backlog and keeps it clear.
+
+## What's Included
+
+### Search, Not Scan
+
+The action asks the GitHub search API for closed, unlocked threads past their inactivity window, so it only touches threads that need locking. It pages through the results, up to 1,000 threads per type per run.
+
+### Separate Rules for Issues and Pull Requests
+
+Each type has its own closing comment, its own number of inactive days, and its own lock reason.
+
+### Preview Before Anything Changes
+
+With `DRY_RUN` on, the action logs every thread it would lock and changes nothing.
+
+### Labels That Opt Out
+
+Threads carrying a label from the comma-delimited `EXCLUDE_LABELS` list are skipped.
+
+### Inputs Checked Up Front
+
+Every input is validated before the run starts, so a misconfigured value stops the run with an error instead of locking the wrong threads.
+
+## Try It
+
+`GITHUB_TOKEN` is the only required input. [Usage](/docs/getting-started/usage/) has a complete workflow, including a weekly schedule that starts as a dry run.

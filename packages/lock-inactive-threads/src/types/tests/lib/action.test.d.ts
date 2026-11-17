@@ -8,7 +8,12 @@ import type { MockedFunction } from 'vitest';
 import type { z } from 'zod';
 
 import type { configuration } from '../../../lib/schema.js';
-import type { addThreadComment, getInactiveThreads, lockThread } from '../../../lib/utility.js';
+import type {
+  addThreadComment,
+  getInactiveThreads,
+  isThreadLocked,
+  lockThread,
+} from '../../../lib/utility.js';
 
 /**
  * Tests - Lib - Action - Lock Inactive Threads - Dry Run Logs Previews But Skips Mutations.
@@ -177,6 +182,25 @@ export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcro
  * @since 1.0.8
  */
 export type Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockWarning = MockedFunction<typeof warning>;
+
+/**
+ * Tests - Lib - Action - Lock Inactive Threads - Skips Threads That Are Already Locked.
+ *
+ * @since 1.0.14
+ */
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_Config = z.infer<typeof configuration>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockGetInactiveThreads = MockedFunction<typeof getInactiveThreads>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockIsThreadLocked = MockedFunction<typeof isThreadLocked>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockAddThreadComment = MockedFunction<typeof addThreadComment>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockLockThread = MockedFunction<typeof lockThread>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetFailed = MockedFunction<typeof setFailed>;
+
+export type Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetOutput = MockedFunction<typeof setOutput>;
 
 /**
  * Tests - Lib - Action - Lock Inactive Threads - Zero Inactive Threads Sets Output Without Locking.

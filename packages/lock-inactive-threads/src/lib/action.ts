@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import {
   addThreadComment,
   getInactiveThreads,
+  isThreadLocked,
   lockThread,
 } from './utility.js';
 
@@ -14,6 +15,7 @@ import type {
   Lib_Action_LockInactiveThreads_InactivePrs,
   Lib_Action_LockInactiveThreads_Returns,
   Lib_Action_LockInactiveThreads_SeenThreadNumbers,
+  Lib_Action_LockInactiveThreads_SkippedCount,
   Lib_Action_LockInactiveThreads_SuccessCount,
   Lib_Action_LockInactiveThreads_TotalCount,
 } from '../types/lib/action.d.ts';
@@ -83,10 +85,22 @@ export async function lockInactiveThreads(config: Lib_Action_LockInactiveThreads
   }
 
   let failureCount: Lib_Action_LockInactiveThreads_FailureCount = 0;
+  let skippedCount: Lib_Action_LockInactiveThreads_SkippedCount = 0;
 
   // Lock inactive issues.
   for (const issue of inactiveIssues) {
     try {
+      // The search index can lag behind, so check the live lock state first.
+      if (await isThreadLocked(issue['number'], config) === true) {
+        skippedCount += 1;
+
+        if (config['logOutput'] === true) {
+          core.info(`Skipping issue #${issue['number']}: already locked`);
+        }
+
+        continue;
+      }
+
       if (config['logOutput'] === true) {
         core.info(`Locking issue #${issue['number']}: ${issue['title']}`);
       }
@@ -107,6 +121,17 @@ export async function lockInactiveThreads(config: Lib_Action_LockInactiveThreads
   // Lock inactive pull requests.
   for (const pr of inactivePrs) {
     try {
+      // The search index can lag behind, so check the live lock state first.
+      if (await isThreadLocked(pr['number'], config) === true) {
+        skippedCount += 1;
+
+        if (config['logOutput'] === true) {
+          core.info(`Skipping pull request #${pr['number']}: already locked`);
+        }
+
+        continue;
+      }
+
       if (config['logOutput'] === true) {
         core.info(`Locking pull request #${pr['number']}: ${pr['title']}`);
       }
@@ -124,7 +149,7 @@ export async function lockInactiveThreads(config: Lib_Action_LockInactiveThreads
     }
   }
 
-  const totalCount: Lib_Action_LockInactiveThreads_TotalCount = inactiveIssues.length + inactivePrs.length;
+  const totalCount: Lib_Action_LockInactiveThreads_TotalCount = inactiveIssues.length + inactivePrs.length - skippedCount;
   const successCount: Lib_Action_LockInactiveThreads_SuccessCount = totalCount - failureCount;
 
   if (failureCount > 0) {

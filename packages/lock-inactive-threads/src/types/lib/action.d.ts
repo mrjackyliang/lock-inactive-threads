@@ -24,6 +24,8 @@ export type Lib_Action_LockInactiveThreads_InactivePrs = Shared_Thread[];
 
 export type Lib_Action_LockInactiveThreads_FailureCount = number;
 
+export type Lib_Action_LockInactiveThreads_SkippedCount = number;
+
 export type Lib_Action_LockInactiveThreads_TotalCount = number;
 
 export type Lib_Action_LockInactiveThreads_SuccessCount = number;

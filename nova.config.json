@@ -162,7 +162,7 @@
         "issue-comment",
         "issues"
       ],
-      "runsOn": "ubuntu-latest",
+      "runsOn": "ubuntu-24.04",
       "timeoutMinutes": 5
     },
     {
@@ -171,7 +171,7 @@
       "triggers": [
         "schedule-weekly"
       ],
-      "runsOn": "ubuntu-latest",
+      "runsOn": "ubuntu-24.04",
       "timeoutMinutes": 5
     },
     {
@@ -180,7 +180,7 @@
       "triggers": [
         "release"
       ],
-      "runsOn": "ubuntu-latest",
+      "runsOn": "ubuntu-24.04",
       "timeoutMinutes": 15,
       "build": [
         "./packages/lock-inactive-threads",
@@ -227,19 +227,19 @@
   },
   "workspaces": {
     "./": {
+      "name": "lock-inactive-threads-project",
       "role": "project",
-      "policy": "freezable",
-      "name": "lock-inactive-threads-project"
+      "policy": "freezable"
     },
     "./apps/docs": {
+      "name": "lock-inactive-threads-docs",
       "role": "docs",
-      "policy": "freezable",
-      "name": "lock-inactive-threads-docs"
+      "policy": "freezable"
     },
     "./packages/lock-inactive-threads": {
+      "name": "lock-inactive-threads",
       "role": "package",
-      "policy": "distributable",
-      "name": "lock-inactive-threads"
+      "policy": "trackable"
     }
   },
   "artifacts": {
@@ -488,7 +488,7 @@
         "prefix": "DOCS_"
       },
       "./packages/lock-inactive-threads": {
-        "prefix": "LIT_",
+        "prefix": "ACTION_",
         "variables": [
           {
             "key": "ACTIONS_RUNNER_DEBUG",

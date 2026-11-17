@@ -2,7 +2,8 @@ import {
   BlogPreview,
   Canvas,
   Features,
-  Stats,
+  Spotlight,
+  WorkflowRunFrame,
 } from '@cbnventures/docusaurus-preset-nova/blocks';
 
 import Head from '@docusaurus/Head';
@@ -18,8 +19,8 @@ import type { Pages_Index_Home_Returns } from '../types/pages/index.d.ts';
 /**
  * Pages - Home.
  *
- * Landing page that composes the hero header, feature grid, stats, and
- * blog preview using theme components from the Nova preset.
+ * Landing page that composes the hero header, feature grid, and blog
+ * preview using theme components from the Nova preset.
  *
  * @constructor
  *
@@ -71,7 +72,7 @@ function Home(): Pages_Index_Home_Returns {
             <div className={`nova-hero-actions ${styles['heroActions']}`}>
               <Link
                 className="nova-cta-primary"
-                to="/docs/overview/"
+                to="/docs/getting-started/usage/"
               >
                 {translate({
                   id: 'home.hero.ctaLabel',
@@ -81,11 +82,11 @@ function Home(): Pages_Index_Home_Returns {
               </Link>
               <Link
                 className="nova-cta-secondary"
-                to="https://github.com/mrjackyliang/lock-inactive-threads"
+                to="/docs/overview/"
               >
                 {translate({
                   id: 'home.hero.secondaryCtaLabel',
-                  message: 'View on GitHub',
+                  message: 'Learn More',
                   description: 'Front page hero secondary call-to-action button label',
                 })}
               </Link>
@@ -204,51 +205,74 @@ function Home(): Pages_Index_Home_Returns {
             },
           ]}
         />
-        <Stats
+        <Spotlight
+          surface="alt"
           heading={translate({
-            id: 'home.stats.heading',
-            message: 'By the Numbers',
-            description: 'Front page Stats section heading',
+            id: 'home.run.heading',
+            message: 'See It Run',
+            description: 'Front page heading above the GitHub Actions run example',
           })}
-          items={[
-            {
-              value: '2',
-              label: translate({
-                id: 'home.stats.threadTypes.label',
-                message: 'Thread types',
-                description: 'Front page Stats label for thread types count',
-              }),
-              color: 'primary',
-            },
-            {
-              value: '4',
-              label: translate({
-                id: 'home.stats.lockReasons.label',
-                message: 'Lock reasons',
-                description: 'Front page Stats label for lock reasons count',
-              }),
-              color: 'accent',
-            },
-            {
-              value: '1,000',
-              label: translate({
-                id: 'home.stats.maxThreadsPerRun.label',
-                message: 'Max threads per type',
-                description: 'Front page Stats label for max threads per type count',
-              }),
-              color: 'primary',
-            },
-            {
-              value: '0',
-              label: translate({
-                id: 'home.stats.manualLocksNeeded.label',
-                message: 'Manual locks needed',
-                description: 'Front page Stats label for manual locks needed count',
-              }),
-              color: 'accent',
-            },
-          ]}
-        />
+        >
+          <p className="nova-section-description">
+            {translate({
+              id: 'home.run.description',
+              message: 'Each scheduled run lists what it found and every thread it locked, right in the job log on GitHub.',
+              description: 'Front page description of the GitHub Actions run example',
+            })}
+          </p>
+          <WorkflowRunFrame
+            workflow="Lock Inactive Issues (lock-inactive)"
+            title="Locking inactive issues (lock-inactive)"
+            runNumber={42}
+            label={translate({
+              id: 'home.run.label',
+              message: 'A GitHub Actions run of Lock Inactive Threads that locked two issues and one pull request',
+              description: 'Accessible label for the GitHub Actions run example',
+            })}
+            jobs={[{
+              name: 'lock-inactive-issues',
+              summary: 'succeeded yesterday in 9s',
+              steps: [
+                {
+                  name: 'Set up job',
+                  duration: '1s',
+                },
+                {
+                  name: 'Lock inactive threads',
+                  duration: '6s',
+                  log: [
+                    {
+                      title: 'Run mrjackyliang/lock-inactive-threads@v1',
+                      hiddenLines: 13,
+                    },
+                    {
+                      title: 'Configuration',
+                      hiddenLines: 12,
+                    },
+                    {
+                      title: 'Context',
+                      hiddenLines: 151,
+                    },
+                    {
+                      title: 'Running',
+                      lines: [
+                        'Found 2 inactive issue(s) and 1 inactive pull request(s)',
+                        'Locking issue #118: Export drops the last row',
+                        'Locking issue #121: Docs link to the old install guide',
+                        'Locking pull request #124: Bump the build image',
+                        'Locked 3 of 3 thread(s)',
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: 'Complete job',
+                  duration: '0s',
+                },
+              ],
+            }]}
+          />
+        </Spotlight>
         <BlogPreview
           heading={translate({
             id: 'home.blogPreview.heading',
@@ -257,11 +281,12 @@ function Home(): Pages_Index_Home_Returns {
           })}
           description={translate({
             id: 'home.blogPreview.description',
-            message: 'Release notes, workflow guides, and notes on repository hygiene.',
+            message: 'Launches, milestones, and what\'s new in Lock Inactive Threads.',
             description: 'Front page Blog Preview section description',
           })}
           auto={true}
           limit={3}
+          sort="newest"
         />
       </main>
     </Layout>

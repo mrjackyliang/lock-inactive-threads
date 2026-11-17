@@ -25,6 +25,11 @@ import type {
   Lib_Utility_GetInactiveThreads_Threshold,
   Lib_Utility_GetInactiveThreads_Type,
   Lib_Utility_GetInactiveThreads_TypeFilter,
+  Lib_Utility_IsThreadLocked_Config,
+  Lib_Utility_IsThreadLocked_IssueNumber,
+  Lib_Utility_IsThreadLocked_Octokit,
+  Lib_Utility_IsThreadLocked_Response,
+  Lib_Utility_IsThreadLocked_Returns,
   Lib_Utility_LockThread_Config,
   Lib_Utility_LockThread_IssueNumber,
   Lib_Utility_LockThread_LockReason,
@@ -164,6 +169,30 @@ export async function getInactiveThreads(config: Lib_Utility_GetInactiveThreads_
   }
 
   return threads;
+}
+
+/**
+ * Lib - Utility - Is Thread Locked.
+ *
+ * Reads the issue or pull request directly so a thread that is already
+ * locked is caught even when the search index still lists it as unlocked.
+ *
+ * @param {Lib_Utility_IsThreadLocked_IssueNumber} issueNumber - Issue number.
+ * @param {Lib_Utility_IsThreadLocked_Config}      config      - Config.
+ *
+ * @returns {Lib_Utility_IsThreadLocked_Returns}
+ *
+ * @since 1.0.14
+ */
+export async function isThreadLocked(issueNumber: Lib_Utility_IsThreadLocked_IssueNumber, config: Lib_Utility_IsThreadLocked_Config): Lib_Utility_IsThreadLocked_Returns {
+  const octokit: Lib_Utility_IsThreadLocked_Octokit = github.getOctokit(config['githubToken']);
+  const response: Lib_Utility_IsThreadLocked_Response = await octokit.rest.issues.get({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: issueNumber,
+  });
+
+  return response.data.locked;
 }
 
 /**

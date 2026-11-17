@@ -72,6 +72,21 @@ export type Lib_Utility_GetInactiveThreads_Response = Awaited<ReturnType<Lib_Uti
 export type Lib_Utility_GetInactiveThreads_ItemType = Shared_Thread_Type;
 
 /**
+ * Lib - Utility - Is Thread Locked.
+ *
+ * @since 1.0.14
+ */
+export type Lib_Utility_IsThreadLocked_IssueNumber = number;
+
+export type Lib_Utility_IsThreadLocked_Config = Lib_Schema_Configuration;
+
+export type Lib_Utility_IsThreadLocked_Returns = Promise<boolean>;
+
+export type Lib_Utility_IsThreadLocked_Octokit = ReturnType<typeof getOctokit>;
+
+export type Lib_Utility_IsThreadLocked_Response = Awaited<ReturnType<Lib_Utility_IsThreadLocked_Octokit['rest']['issues']['get']>>;
+
+/**
  * Lib - Utility - Lock Thread.
  *
  * @since 1.0.0

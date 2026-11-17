@@ -1,0 +1,49 @@
+---
+title: "Lock Inactive Threads Gets Its Own Documentation Site"
+description: Every input, output, and workflow schedule now has a page, and one failed thread no longer stops the rest of the run.
+slug: lock-inactive-threads-documentation-site
+authors:
+  - mrjackyliang
+keywords:
+  - lock inactive threads
+  - documentation
+  - github action
+  - inputs
+  - outputs
+tags:
+  - release
+  - documentation
+  - github actions
+---
+
+Lock Inactive Threads has its own documentation site, launched with version 1.0.1. It covers setup, every input and output, and the terms the action uses, in one searchable place.
+
+{/* truncate */}
+
+## Why It Matters
+
+Until now, everything about the action lived in one README. Finding a lock reason's exact spelling or the meaning of the `result` output meant scrolling through the whole file.
+
+The site gives each topic its own page, and workflows can follow the `v1` tag to get every 1.x release without editing their version.
+
+## What's Included
+
+### Usage Guide
+
+A complete scheduled workflow, the permissions it needs, and the settings to change before turning off the dry run.
+
+### Inputs and Outputs Reference
+
+All 10 inputs with their defaults, plus the `result` output and how a later step can react when a run reports a failure.
+
+### Terminology
+
+Plain definitions for the terms the action uses, linked from every page that uses them.
+
+## A Run That Finishes
+
+The same release changes how failures are handled. When one thread can't be commented on or locked, the action moves on to the rest, counts the failures, and reports them at the end with `result` set to `"false"`.
+
+## Try It
+
+Start with the [Overview](/docs/overview/), then add the action with [Usage](/docs/getting-started/usage/).

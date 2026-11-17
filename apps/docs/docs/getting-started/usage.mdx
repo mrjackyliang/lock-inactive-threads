@@ -23,13 +23,13 @@ Set up Lock Inactive Threads as a scheduled GitHub Actions workflow that automat
 
 ## Prerequisites
 
-- **GitHub repository** — You'll need admin or write access to the repository where you want to lock <Terminology title="closed, unlocked thread past its inactivity window" to="/docs/reference/terminology#inactive-thread">inactive threads</Terminology>.
+- **GitHub repository** — You'll need admin or write access to the repository where you want to lock <Terminology title="Closed, unlocked, and quiet longer than your day limit" to="/docs/reference/terminology#threads-and-inactivity">inactive threads</Terminology>.
 - **GitHub Actions enabled** — The repository's Actions tab should be active, which is the default for most repositories.
 - **Workflow file location** — All workflow files live in the `.github/workflows/` directory at the root of your repository.
 
 ## Basic Workflow
 
-Choose a daily run for active repositories or a weekly run when one maintenance pass is enough. Both workflows support manual dispatch with a <Terminology title="preview mode that changes nothing" to="/docs/reference/terminology#dry-run">dry-run</Terminology> toggle, and `GITHUB_TOKEN` is the only required input.
+Choose a daily run for active repositories or a weekly run when one maintenance pass is enough. Both workflows support manual dispatch with a <Terminology title="Shows what would lock without touching anything" to="/docs/reference/terminology#locking">dry-run</Terminology> toggle, and `GITHUB_TOKEN` is the only required input.
 
 <Tabs groupId="usage-schedule">
   <TabItem value="daily" label="Daily" default>
@@ -98,11 +98,11 @@ Choose a daily run for active repositories or a weekly run when one maintenance 
   </TabItem>
 </Tabs>
 
-The workflow requires `issues: write` and `pull-requests: write` permissions so the action can post comments and lock <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology>. You can find every available input and its default value on the [inputs](/docs/reference/inputs/) reference page.
+The workflow requires `issues: write` and `pull-requests: write` permissions so the action can post comments and lock <Terminology title="Any issue or pull request the action can lock" to="/docs/reference/terminology#threads-and-inactivity">threads</Terminology>. You can find every available input and its default value on the [inputs](/docs/reference/inputs/) reference page.
 
 ## Custom Comments
 
-You can personalize the comment the action posts before locking a <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">thread</Terminology>. Setting `ISSUE_COMMENT` and `PR_COMMENT` lets you match your project's voice or link to relevant resources.
+You can personalize the comment the action posts before locking a <Terminology title="Any issue or pull request the action can lock" to="/docs/reference/terminology#threads-and-inactivity">thread</Terminology>. Setting `ISSUE_COMMENT` and `PR_COMMENT` lets you match your project's voice or link to relevant resources.
 
 ```yaml title=".github/workflows/lock-inactive-threads.yml"
 - uses: "mrjackyliang/lock-inactive-threads@v1"
@@ -125,7 +125,7 @@ The `EXCLUDE_LABELS` input accepts a comma-delimited list of label names. Any is
     EXCLUDE_LABELS: "do-not-lock, keep-open, pinned"
 ```
 
-This is useful for long-running discussions, pinned issues, or tracking <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> you want to keep unlocked indefinitely.
+This is useful for long-running discussions, pinned issues, or tracking <Terminology title="Any issue or pull request the action can lock" to="/docs/reference/terminology#threads-and-inactivity">threads</Terminology> you want to keep unlocked indefinitely.
 
 ## Scheduling
 
@@ -139,7 +139,7 @@ The `schedule` trigger uses standard cron syntax with five fields: minute, hour,
 
 ### Manual Dispatch
 
-The `workflow_dispatch` trigger in the basic workflow adds a "Run workflow" button to the Actions tab. The `dry-run` input defaults to `true` for manual runs, so you can preview which <Terminology title="an issue or a pull request" to="/docs/reference/terminology#thread">threads</Terminology> would be locked without making changes.
+The `workflow_dispatch` trigger in the basic workflow adds a "Run workflow" button to the Actions tab. The `dry-run` input defaults to `true` for manual runs, so you can preview which <Terminology title="Any issue or pull request the action can lock" to="/docs/reference/terminology#threads-and-inactivity">threads</Terminology> would be locked without making changes.
 
 You can also trigger a manual run from the GitHub CLI:
 

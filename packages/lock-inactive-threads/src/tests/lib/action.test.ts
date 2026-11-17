@@ -12,6 +12,7 @@ import { lockInactiveThreads } from '../../lib/action.js';
 import {
   addThreadComment,
   getInactiveThreads,
+  isThreadLocked,
   lockThread,
 } from '../../lib/utility.js';
 
@@ -40,6 +41,13 @@ import type {
   Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockGetInactiveThreads,
   Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockLockThread,
   Tests_Lib_Action_LockInactiveThreads_SkipsDuplicateThreadNumbersAcrossSearches_MockWarning,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_Config,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockAddThreadComment,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockGetInactiveThreads,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockIsThreadLocked,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockLockThread,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetFailed,
+  Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetOutput,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_Config,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_MockAddThreadComment,
   Tests_Lib_Action_LockInactiveThreads_ZeroInactiveThreadsSetsOutputWithoutLocking_MockGetInactiveThreads,
@@ -325,6 +333,62 @@ describe('lockInactiveThreads', () => {
     expect(mockSetFailed).toHaveBeenCalledWith('Failed to lock 1 of 2 thread(s)');
 
     expect(mockSetOutput).toHaveBeenCalledWith('result', false);
+
+    return;
+  });
+
+  it('skips threads that are already locked', async () => {
+    const config: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_Config = {
+      githubToken: 'ghp_test123',
+      issueComment: 'Locking issue.',
+      issueInactiveDays: 30,
+      issueLockReason: 'resolved' as const,
+      prComment: 'Locking PR.',
+      prInactiveDays: 30,
+      prLockReason: 'resolved' as const,
+      excludeLabels: [],
+      logOutput: true,
+      dryRun: false,
+    };
+    const mockGetInactiveThreads: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockGetInactiveThreads = vi.mocked(getInactiveThreads);
+    const mockIsThreadLocked: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockIsThreadLocked = vi.mocked(isThreadLocked);
+    const mockAddThreadComment: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockAddThreadComment = vi.mocked(addThreadComment);
+    const mockLockThread: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockLockThread = vi.mocked(lockThread);
+    const mockSetFailed: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetFailed = vi.mocked(core.setFailed);
+    const mockSetOutput: Tests_Lib_Action_LockInactiveThreads_SkipsThreadsThatAreAlreadyLocked_MockSetOutput = vi.mocked(core.setOutput);
+
+    mockGetInactiveThreads.mockResolvedValueOnce([]).mockResolvedValueOnce([
+      {
+        type: 'pull-request',
+        number: 123,
+        title: 'Already locked',
+        updatedAt: '2024-01-01T00:00:00Z',
+      },
+      {
+        type: 'pull-request',
+        number: 142,
+        title: 'Still unlocked',
+        updatedAt: '2024-01-01T00:00:00Z',
+      },
+    ]);
+
+    mockIsThreadLocked.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+
+    await lockInactiveThreads(config);
+
+    expect(mockAddThreadComment).toHaveBeenCalledTimes(1);
+
+    expect(mockAddThreadComment).toHaveBeenCalledWith(142, 'Locking PR.', config);
+
+    expect(mockLockThread).toHaveBeenCalledTimes(1);
+
+    expect(vi.mocked(core.info)).toHaveBeenCalledWith('Skipping pull request #123: already locked');
+
+    expect(vi.mocked(core.info)).toHaveBeenCalledWith('Locked 1 of 1 thread(s)');
+
+    expect(mockSetFailed).not.toHaveBeenCalled();
+
+    expect(mockSetOutput).toHaveBeenCalledWith('result', true);
 
     return;
   });

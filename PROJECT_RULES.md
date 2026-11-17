@@ -125,7 +125,7 @@ Environment variables are only used for local action runs. Copy `packages/lock-i
 
 ## Workspace Rules
 
-Nova defines a freezable root project, a freezable documentation workspace, and the distributable action package in `nova.config.json`.
+Nova defines a freezable root project, a freezable documentation workspace, and the trackable action package in `nova.config.json`.
 
 ### Naming Conventions
 
