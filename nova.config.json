@@ -5,8 +5,8 @@
       "slug": "lock-inactive-threads"
     },
     "description": {
-      "short": "A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days",
-      "long": "GitHub Action that locks closed issues and pull requests once they have gone quiet for a configurable number of days. Issues and pull requests each get their own inactivity window, comment text, and GitHub lock reason. Excluded labels are skipped, and a dry run lists every thread it would lock — number, title, and last activity — before anything changes."
+      "short": "A GitHub Action that locks closed issues and pull requests once they go quiet",
+      "long": "Lock closed issues and pull requests after they sit quiet for as many days as you choose, with separate windows, comments, and lock reasons for each. Skip labels you want left alone, and preview every thread with a dry run before anything changes."
     },
     "keywords": [
       "actions",
@@ -150,8 +150,157 @@
     ],
     "issueTemplate": {
       "bugReportFields": [
-        "nodejs"
-      ]
+        "github-action"
+      ],
+      "customQuestions": {
+        "bug": [
+          {
+            "type": "dropdown",
+            "id": "thread-type",
+            "attributes": {
+              "label": "Thread Type",
+              "description": "Select the affected GitHub thread type.",
+              "options": [
+                "Issue",
+                "Pull Request",
+                "Both"
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "type": "dropdown",
+            "id": "action-mode",
+            "attributes": {
+              "label": "Action Mode",
+              "description": "Select the action mode used by the affected run.",
+              "options": [
+                "Live Run",
+                "Dry Run"
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "type": "dropdown",
+            "id": "affected-setting",
+            "attributes": {
+              "label": "Affected Setting",
+              "description": "Select the action setting involved.",
+              "options": [
+                "Inactivity Window",
+                "Closing Comment",
+                "Lock Reason",
+                "Excluded Labels",
+                "Logging",
+                "Pagination or Search",
+                "Result Output",
+                "Other"
+              ]
+            },
+            "validations": {
+              "required": false
+            }
+          }
+        ],
+        "feature": [
+          {
+            "type": "dropdown",
+            "id": "thread-type",
+            "attributes": {
+              "label": "Thread Type",
+              "description": "Select the affected GitHub thread type.",
+              "options": [
+                "Issue",
+                "Pull Request",
+                "Both"
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "type": "dropdown",
+            "id": "affected-setting",
+            "attributes": {
+              "label": "Affected Setting",
+              "description": "Select the action setting involved.",
+              "options": [
+                "Inactivity Window",
+                "Closing Comment",
+                "Lock Reason",
+                "Excluded Labels",
+                "Logging",
+                "Pagination or Search",
+                "Result Output",
+                "Other"
+              ]
+            },
+            "validations": {
+              "required": false
+            }
+          }
+        ],
+        "support": [
+          {
+            "type": "dropdown",
+            "id": "thread-type",
+            "attributes": {
+              "label": "Thread Type",
+              "description": "Select the affected GitHub thread type.",
+              "options": [
+                "Issue",
+                "Pull Request",
+                "Both"
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "type": "dropdown",
+            "id": "action-mode",
+            "attributes": {
+              "label": "Action Mode",
+              "description": "Select the action mode used by the affected run.",
+              "options": [
+                "Live Run",
+                "Dry Run"
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "type": "dropdown",
+            "id": "affected-setting",
+            "attributes": {
+              "label": "Affected Setting",
+              "description": "Select the action setting involved.",
+              "options": [
+                "Inactivity Window",
+                "Closing Comment",
+                "Lock Reason",
+                "Excluded Labels",
+                "Logging",
+                "Pagination or Search",
+                "Result Output",
+                "Other"
+              ]
+            },
+            "validations": {
+              "required": false
+            }
+          }
+        ]
+      }
     }
   },
   "workflows": [
@@ -181,7 +330,7 @@
         "release"
       ],
       "runsOn": "ubuntu-24.04",
-      "timeoutMinutes": 15,
+      "timeoutMinutes": 30,
       "build": [
         "./packages/lock-inactive-threads",
         "./apps/docs"
@@ -215,13 +364,16 @@
     "fundSources": [
       "https://github.com/sponsors/mrjackyliang",
       "https://liang.nyc/paypal"
-    ]
+    ],
+    "privacyPolicy": "https://github.com/mrjackyliang/mrjackyliang/blob/HEAD/PRIVACY.md",
+    "termsOfUse": "https://github.com/mrjackyliang/mrjackyliang/blob/HEAD/TERMS.md"
   },
   "readme": {
     "badges": [
       "github-release",
       "github-top-language",
       "github-license",
+      "coverage",
       "funding"
     ]
   },
@@ -294,6 +446,11 @@
         "enabled": true
       }
     },
+    "github-action": {
+      "sync-identity": {
+        "enabled": true
+      }
+    },
     "license": {
       "update-copyright": {
         "enabled": true
@@ -338,6 +495,11 @@
         "enabled": true
       },
       "update-introduction": {
+        "enabled": true
+      }
+    },
+    "tsconfig": {
+      "sync-references": {
         "enabled": true
       }
     },
@@ -560,6 +722,9 @@
     }
   },
   "settings": {
+    "coverage": {
+      "minimum": 75
+    },
     "lockStepVersioning": true,
     "runWorkspaces": {
       "cache": {

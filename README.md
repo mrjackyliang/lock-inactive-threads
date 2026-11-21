@@ -25,6 +25,9 @@
   <a href="https://github.com/mrjackyliang/lock-inactive-threads/blob/HEAD/LICENSE">
     <img alt="GitHub License" src="https://img.shields.io/github/license/mrjackyliang/lock-inactive-threads?style=for-the-badge&logo=googledocs&logoColor=%23ffffff&color=%2348a56a">
   </a>
+  <a href="https://github.com/mrjackyliang/lock-inactive-threads/actions">
+    <img alt="Test Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fmrjackyliang.github.io%2Flock-inactive-threads%2Fbadges%2Fcoverage.json&style=for-the-badge&logo=vitest&logoColor=%23ffffff">
+  </a>
   <a href="https://github.com/sponsors/mrjackyliang">
     <img alt="Become a GitHub Sponsor" src="https://img.shields.io/badge/github-sponsor-gray?style=for-the-badge&logo=githubsponsors&logoColor=%23ffffff&color=%23eaaf41">
   </a>
@@ -37,7 +40,7 @@
 <!-- nova-region: introduction -->
 ## Introduction
 
-GitHub Action that locks closed issues and pull requests once they have gone quiet for a configurable number of days. Issues and pull requests each get their own inactivity window, comment text, and GitHub lock reason. Excluded labels are skipped, and a dry run lists every thread it would lock — number, title, and last activity — before anything changes.
+Lock closed issues and pull requests after they sit quiet for as many days as you choose, with separate windows, comments, and lock reasons for each. Skip labels you want left alone, and preview every thread with a dry run before anything changes.
 <!-- nova-region-end: introduction -->
 
 <!-- nova-region: documentation -->

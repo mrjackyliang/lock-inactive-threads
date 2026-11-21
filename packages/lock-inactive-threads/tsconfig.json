@@ -8,17 +8,16 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "noEmitOnError": false,
-    "outDir": "./build",
     "rootDir": "./src",
     "types": [
       "@types/node"
     ]
   },
   "include": [
-    "./src/index.ts",
-    "./src/run.ts",
-    "./src/lib/**/*",
-    "./src/types/**/*"
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "./src/**/*.test.ts",
+    "./src/tests/**"
   ]
 }

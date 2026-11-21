@@ -1,5 +1,13 @@
 # lock-inactive-threads
 
+## 1.0.15 - 2026-11-21
+
+### UPDATED
+- Workspace type-check, test and build scripts, which now follow Nova's current GitHub Action layout and build with the pinned `ncc` from devDependencies.
+- Tests now report coverage through a `check:coverage` script, which fails when line, function, branch or statement coverage drops below the project minimum, and the README badges now include that coverage.
+- GitHub Marketplace description, which now reads "A GitHub Action that locks closed issues and pull requests once they go quiet".
+- Nova 0.49.0, which now publishes a coverage badge with the documentation, gives the publish workflow longer step timeouts and pins its checkouts to the release commit.
+
 ## 1.0.14 - 2026-11-17
 
 ### UPDATED

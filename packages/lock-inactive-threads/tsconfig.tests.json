@@ -8,9 +8,11 @@
   "compilerOptions": {
     "types": [
       "@types/node"
-    ]
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
   "include": [
-    "./src/tests/**/*"
+    "./src/tests/**/*.ts"
   ]
 }

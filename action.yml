@@ -1,5 +1,5 @@
 name: "Lock Inactive Threads"
-description: "A GitHub Action designed to lock issues and pull requests that have been inactive for a configurable number of days"
+description: "A GitHub Action that locks closed issues and pull requests once they go quiet"
 author: "Jacky Liang"
 
 branding:
