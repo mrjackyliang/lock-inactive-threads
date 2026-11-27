@@ -1,5 +1,10 @@
 # lock-inactive-threads
 
+## 1.0.16 - 2026-11-27
+
+### UPDATED
+- The documentation site now loads Google Analytics and Microsoft Clarity directly instead of through Google Tag Manager and has its own fonts and colors, and the project uses Nova 0.54.0.
+
 ## 1.0.15 - 2026-11-21
 
 ### UPDATED
