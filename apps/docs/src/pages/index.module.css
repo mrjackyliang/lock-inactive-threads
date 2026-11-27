@@ -79,7 +79,7 @@
   height: 12px;
   border-radius: 50%;
   background: var(--nova-color-border);
-  border: 2px solid var(--nova-color-surface);
+  border: 2px solid var(--nova-color-background);
   box-shadow: 0 0 0 1px var(--nova-color-border);
 }
 
@@ -89,8 +89,8 @@
 }
 
 .tlDotRed {
-  background: var(--nova-color-secondary-600, #8b2020);
-  box-shadow: 0 0 0 1px var(--nova-color-secondary-600, #8b2020);
+  background: var(--nova-color-danger-500);
+  box-shadow: 0 0 0 1px var(--nova-color-danger-500);
 }
 
 .tlTime {
@@ -138,8 +138,8 @@
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--nova-color-secondary-600, #8b2020) 10%, transparent);
-  color: var(--nova-color-secondary-600, #8b2020);
+  background: color-mix(in srgb, var(--nova-color-danger-500) 10%, transparent);
+  color: var(--nova-color-danger-500);
 }
 
 /* =====================================================================
@@ -194,18 +194,12 @@
   box-shadow: 0 0 0 1px var(--nova-color-accent-400);
 }
 
-:global([data-theme="dark"]) .tlDotRed {
-  background: #e05050;
-  box-shadow: 0 0 0 1px #e05050;
-}
-
 :global([data-theme="dark"]) .tlComment {
   border-left-color: var(--nova-color-accent-400);
 }
 
 :global([data-theme="dark"]) .tlBadge {
-  background: color-mix(in srgb, #e05050 15%, transparent);
-  color: #f07070;
+  background: color-mix(in srgb, var(--nova-color-danger-500) 15%, transparent);
 }
 
 /* =====================================================================

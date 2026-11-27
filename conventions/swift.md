@@ -5,7 +5,7 @@ Quotes: Double (only option). Indentation: 4-space. File naming: PascalCase + ro
 ## Documentation Style
 
 - Comment syntax: `///`
-- Padding tag: `- Since: UNRELEASED` (DocC callout; Nova stamps it during the workspace release)
+- Padding tag: `- Since: UNRELEASED` (DocC callout) — tag new declarations with the sentinel; keep the original version on existing declarations without stacking or replacing it. Nova stamps the real version during the workspace release, so never hand-write a version number.
 - Param format: `- Parameter name: Name.` (description matches the parameter name, capitalized, with a trailing period)
 - Return format: `- Returns: Description.`
 - Throws format: `- Throws: Description.`
@@ -126,23 +126,25 @@ if let name = config.name {
 
 ### `switch` — Always Exhaustive with Block Scope
 
-Every `case` and `default` uses block-like separation. Switch must be exhaustive (compiler-enforced for enums, `default` required for other types).
+Every `case` and `default` wraps its body in a `do { … }` block. Switch must be exhaustive (compiler-enforced for enums, `default` required for other types).
 
 ```swift
 switch category {
-    case .added: {
+    case .added: do {
         logger.info("New feature.")
     }
 
-    case .fixed: {
+    case .fixed: do {
         logger.info("Bug fix.")
     }
 
-    default: {
+    default: do {
         logger.warn("Unknown category.")
     }
 }
 ```
+
+Write `do` after the colon. A bare `{ … }` after `case .x:` is a closure Swift never calls, so it fails with "closure expression is unused", and a `break` inside it fails with "'break' is only allowed inside a loop".
 
 ### Explicit Nil Checks — Avoid Optional Chaining
 

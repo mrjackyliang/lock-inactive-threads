@@ -160,11 +160,15 @@ const config: DocusaurusNovaConfig = {
             light: '#C0392B',
             dark: '#E74C3C',
           },
+          success: {
+            light: '#1F844F',
+            dark: '#4ED08B',
+          },
         },
         fonts: {
-          display: 'Space Grotesk',
-          body: 'Inter',
-          code: 'JetBrains Mono',
+          display: 'Urbanist',
+          body: 'Albert Sans',
+          code: 'Spline Sans Mono',
         },
         navbar: undefined,
         footer: undefined,
@@ -221,8 +225,11 @@ const config: DocusaurusNovaConfig = {
 
       // Analytics.
       analytics: {
-        gtm: {
-          containerId: 'GTM-NJN3C25S',
+        googleAnalytics: {
+          measurementId: 'G-4P0KHCMPS3',
+        },
+        clarity: {
+          projectId: 'zjw8yxuvyg',
         },
       },
 
@@ -450,10 +457,20 @@ const config: DocusaurusNovaConfig = {
             href: 'https://www.mrjackyliang.com/work/',
           },
         ],
-        legal: [{
-          label: 'License',
-          href: 'https://github.com/mrjackyliang/lock-inactive-threads/blob/HEAD/LICENSE',
-        }],
+        legal: [
+          {
+            label: 'License',
+            href: 'https://github.com/mrjackyliang/lock-inactive-threads/blob/HEAD/LICENSE',
+          },
+          {
+            label: 'Terms of Use',
+            href: 'https://mrjackyliang.github.io/mrjackyliang/terms/',
+          },
+          {
+            label: 'Privacy Policy',
+            href: 'https://mrjackyliang.github.io/mrjackyliang/privacy/',
+          },
+        ],
       },
       layout: {
         docs: {

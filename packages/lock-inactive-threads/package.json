@@ -1,6 +1,6 @@
 {
   "name": "lock-inactive-threads",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "license": "MIT",
   "exports": {
     ".": {
@@ -34,7 +34,7 @@
   "dependencies": {
     "@actions/core": "1.10.1",
     "@actions/github": "6.0.0",
-    "@cbnventures/nova": "0.49.0",
+    "@cbnventures/nova": "0.54.0",
     "zod": "4.4.3"
   },
   "devDependencies": {
